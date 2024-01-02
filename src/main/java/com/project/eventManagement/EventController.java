@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +24,14 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Event>> getAllEvents() {
+    public String showEvents(Model model) {
         List<Event> events = eventService.getAllEvents();
-        return ResponseEntity.ok(events);
+
+        model.addAttribute("events", events);
+        return "events";
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         Event createdEvent = eventService.createEvent(event);
         return ResponseEntity.ok(createdEvent);
@@ -44,6 +48,17 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
 
+    }
+
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelEvent(@PathVariable Long id) {
+        boolean canceled = eventService.cancelEvent(id);
+
+        if (canceled) {
+            return ResponseEntity.ok("Event canceled!");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

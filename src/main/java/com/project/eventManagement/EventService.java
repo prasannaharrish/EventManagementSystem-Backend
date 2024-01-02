@@ -55,15 +55,18 @@ public class EventService {
 
     }
 
-    public void cancelEvent(Long eventId) {
+    public boolean cancelEvent(Long id) {
+        Event eventToCancel = eventRepository.findById(id).orElse(null);
 
-        // logic for cancelling the events.
-        eventRepository.deleteById(eventId);
+        if (eventToCancel != null) {
+
+            eventRepository.delete(eventToCancel);
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
-
-    // public Optional<Event> getEventbyId(Long eventId) {
-    // // logic
-    // return eventRepository.findById(eventId);
-    // }
 
 }

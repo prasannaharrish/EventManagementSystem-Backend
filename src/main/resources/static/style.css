@@ -1,0 +1,41 @@
+* {
+  background-color: #e3e3e3;
+}
+
+.eventListHeading {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #455d7a;
+  font-size: 35px;
+  font-weight: bold;
+  margin: 15px;
+}
+
+th {
+  margin: 15px;
+}
+.heading {
+  color: #233142;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.addEvent {
+  background-color: #233142;
+  border-radius: 35px;
+  width: 140px;
+  height: 40px;
+  margin: 15px;
+  color: #e3e3e3;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.eventTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 2px solid #233142;
+}
