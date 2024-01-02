@@ -1,8 +1,12 @@
 package com.project.eventManagement;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.aspectj.apache.bcel.generic.LOOKUPSWITCH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +21,18 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
-        // logic for creating the events
+
+        if (event.getDate() == null) {
+            event.setDate(LocalDate.now().toString());
+        }
+        if (event.getTime() == null) {
+            event.setTime(LocalTime.now().toString());
+        }
+
+        if (event.getTitle() == null || event.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Event title cannot be empty");
+
+        }
         return eventRepository.save(event);
 
     }

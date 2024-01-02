@@ -20,7 +20,10 @@ public class Event {
     private String title;
 
     @Column(nullable = false)
-    private LocalDateTime dateTime;
+    private String eventDate;
+
+    @Column(nullable = false)
+    private String eventTime;
 
     @Column(nullable = false)
     private String location;
@@ -31,9 +34,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, LocalDateTime dateTime, String location, String description) {
+    public Event(String title, String eventDate, String eventTime, String location, String description) {
         this.title = title;
-        this.dateTime = dateTime;
+        this.eventDate = eventDate;
+        this.eventTime = eventTime;
         this.location = location;
         this.description = description;
     }
@@ -54,12 +58,20 @@ public class Event {
         this.title = title;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public String getDate() {
+        return eventDate;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(String eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public String getTime() {
+        return eventTime;
+    }
+
+    public void setTime(String eventTime) {
+        this.eventTime = eventTime;
     }
 
     public String getLocation() {
