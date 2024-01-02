@@ -9,8 +9,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,26 +22,26 @@ public class Event {
     private String title;
 
     @Column(nullable = false)
-    private String eventDate;
-
-    @Column(nullable = false)
-    private String eventTime;
-
-    @Column(nullable = false)
     private String location;
 
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private String date;
+
+    @Column(nullable = false)
+    private String time;
+
     public Event() {
     }
 
-    public Event(String title, String eventDate, String eventTime, String location, String description) {
+    public Event(String title, String location, String description, String date, String time) {
         this.title = title;
-        this.eventDate = eventDate;
-        this.eventTime = eventTime;
         this.location = location;
         this.description = description;
+        this.date = date;
+        this.time = time;
     }
 
     public Long getId() {
@@ -59,19 +61,19 @@ public class Event {
     }
 
     public String getDate() {
-        return eventDate;
+        return date;
     }
 
-    public void setDate(String eventDate) {
-        this.eventDate = eventDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime() {
-        return eventTime;
+        return time;
     }
 
-    public void setTime(String eventTime) {
-        this.eventTime = eventTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getLocation() {

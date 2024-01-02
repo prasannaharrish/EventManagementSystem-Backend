@@ -37,10 +37,22 @@ public class EventService {
 
     }
 
-    public Event editEvent(Event event) {
+    public Event editEvent(Long id, Event updatedEvent) {
+        Event existingEvent = eventRepository.findById(id).orElse(null);
 
-        // logic for editing the events
-        return eventRepository.save(event);
+        if (existingEvent != null) {
+            existingEvent.setTitle(updatedEvent.getTitle());
+            existingEvent.setLocation(updatedEvent.getLocation());
+            existingEvent.setDescription(updatedEvent.getDescription());
+            existingEvent.setDate(updatedEvent.getDate());
+            existingEvent.setTime(updatedEvent.getTime());
+
+            return eventRepository.save(existingEvent);
+
+        } else {
+            return null;
+        }
+
     }
 
     public void cancelEvent(Long eventId) {
@@ -49,9 +61,9 @@ public class EventService {
         eventRepository.deleteById(eventId);
     }
 
-    public Optional<Event> getEventbyId(Long eventId) {
-        // logic
-        return eventRepository.findById(eventId);
-    }
+    // public Optional<Event> getEventbyId(Long eventId) {
+    // // logic
+    // return eventRepository.findById(eventId);
+    // }
 
 }
