@@ -24,8 +24,8 @@ public class Event {
     private String title;
     private String location;
     private String description;
-    private Date date;
-    private Date time;
+    private String date;
+    private String time;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -45,7 +45,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String location, String description, Date date, Date time, User user,
+    public Event(String title, String location, String description, String date, String time, User user,
             String category) {
         this.title = title;
         this.location = location;
@@ -70,19 +70,19 @@ public class Event {
         this.title = title;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
