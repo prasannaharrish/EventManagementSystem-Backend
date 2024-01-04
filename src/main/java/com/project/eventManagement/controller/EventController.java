@@ -26,11 +26,10 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/all")
-    public String getAllEvents(Model model) {
+    public ResponseEntity<List<Event>> getAllEvents() {
         List<Event> events = eventService.getAllEvents();
-        model.addAttribute("events", events);
 
-        return "event";
+        return new ResponseEntity<>(events, HttpStatus.OK);
 
     }
 
