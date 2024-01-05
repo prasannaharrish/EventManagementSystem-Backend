@@ -18,9 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    private String firstName;
+    private String lastName;
+    private String email;
     private String username;
     private String password;
-    private String email;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt", nullable = false, updatable = false)
@@ -34,13 +36,31 @@ public class User {
 
     }
 
-    public User(String username, String password, String email) {
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.username = username;
         this.password = password;
-        this.email = email;
         this.createdAt = new Date();
         this.updatedAt = new Date();
 
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Long getUserId() {
