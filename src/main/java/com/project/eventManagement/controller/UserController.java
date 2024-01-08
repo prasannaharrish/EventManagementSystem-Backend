@@ -26,11 +26,12 @@ public class UserController {
 
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<User> login(@RequestBody LoginDTO loginDTO) {
-    // User user = userService.loginUser(loginDTO);
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
+        LoginResponse loginResponse = userService.loginUser(loginDTO);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
 
-    // return new ResponseEntity<>(user, HttpStatus.OK);
-    // }
+        // return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 }

@@ -11,15 +11,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByUsername(String username);
+    User existsByUsername(String username);
 
-    boolean existsByEmail(String email);
+    User existsByEmail(String email);
 
-    // Optional<User> findByUsernameAndPassword(String userName, String password);
-    // //query method provided by jpa
+
 
     @Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password")
-    Optional<User> loginUser(@Param("username") String username, @Param("password") String password); // custom query
-                                                                                                      // method.
+    Optional<User> loginUser(@Param("username") String username, @Param("password") String password);
 
 }

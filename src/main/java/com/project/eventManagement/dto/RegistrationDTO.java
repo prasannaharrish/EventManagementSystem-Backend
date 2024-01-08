@@ -48,4 +48,10 @@ public class RegistrationDTO {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "RegistrationDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", username="
+                + username + ", password=" + password + "]";
+    }
+
 }

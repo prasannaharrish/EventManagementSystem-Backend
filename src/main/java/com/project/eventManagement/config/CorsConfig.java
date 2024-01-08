@@ -1,4 +1,4 @@
-package com.project.eventManagement;
+package com.project.eventManagement.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://127.0.0.1:5501")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("Content-Type")
+                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
