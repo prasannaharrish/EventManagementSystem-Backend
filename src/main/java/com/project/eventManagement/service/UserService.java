@@ -1,5 +1,7 @@
 package com.project.eventManagement.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.project.eventManagement.controller.LoginResponse;
@@ -11,6 +13,7 @@ public interface UserService {
 
     User registerUser(RegistrationDTO registrationDTO);
 
-    LoginResponse loginUser(LoginDTO loginDTO);
+    LoginResponse loginStatus(LoginDTO loginDTO);
+
 
 }

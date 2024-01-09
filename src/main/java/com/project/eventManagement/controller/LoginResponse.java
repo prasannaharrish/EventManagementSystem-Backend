@@ -1,8 +1,10 @@
 package com.project.eventManagement.controller;
 
+import com.project.eventManagement.entity.User;
+
 public class LoginResponse {
-    String message;
-    Boolean status;
+    private String message;
+    private Boolean status;
 
     public String getMessage() {
         return message;

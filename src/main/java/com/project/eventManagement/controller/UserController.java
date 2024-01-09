@@ -5,6 +5,8 @@ import com.project.eventManagement.dto.RegistrationDTO;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.service.UserService;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +29,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
-        LoginResponse loginResponse = userService.loginUser(loginDTO);
-        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-
-        // return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<?> loginStatus(@RequestBody LoginDTO loginDTO) {
+        LoginResponse loginResponse = userService.loginStatus(loginDTO);
+        return ResponseEntity.ok(loginResponse);
     }
 
 }
