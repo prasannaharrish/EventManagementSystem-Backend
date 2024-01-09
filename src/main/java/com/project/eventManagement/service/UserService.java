@@ -1,19 +1,32 @@
 package com.project.eventManagement.service;
 
-import java.util.Optional;
-
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.project.eventManagement.controller.LoginResponse;
-import com.project.eventManagement.dto.LoginDTO;
-import com.project.eventManagement.dto.RegistrationDTO;
-import com.project.eventManagement.entity.User;
+import com.project.eventManagement.repository.UserRepository;
 
-public interface UserService {
+@Service
+public class UserService implements UserDetailsService {
 
-    User registerUser(RegistrationDTO registrationDTO);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    LoginResponse loginStatus(LoginDTO loginDTO);
+    @Autowired
+    private UserRepository userRepository;
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        System.out.println("In the user detail service");
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
+
+    }
 
 }

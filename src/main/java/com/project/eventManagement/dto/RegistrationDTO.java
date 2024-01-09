@@ -48,10 +48,24 @@ public class RegistrationDTO {
         this.email = email;
     }
 
+    public RegistrationDTO() {
+        super();
+    }
+
+    public RegistrationDTO(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "RegistrationDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", username="
                 + username + ", password=" + password + "]";
     }
+
+    
 
 }
