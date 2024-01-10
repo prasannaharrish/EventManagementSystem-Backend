@@ -24,8 +24,6 @@ public class TokenService {
     @Autowired
     private JwtEncoder jwtEncoder;
 
-    @Autowired
-    private User user;
 
     public String generateJwt(Authentication auth) {
 
