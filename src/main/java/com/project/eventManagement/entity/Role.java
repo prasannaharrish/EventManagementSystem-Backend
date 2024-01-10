@@ -1,6 +1,5 @@
 package com.project.eventManagement.entity;
 
-import org.springframework.security.authentication.jaas.AuthorityGranter;
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Entity;

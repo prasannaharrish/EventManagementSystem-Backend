@@ -17,7 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -64,9 +64,6 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-
     }
 
     public String getFirstName() {
@@ -158,5 +155,16 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @PrePersist
+    public void before() {
+
+        Date date = new Date();
+
+        if (this.createdAt == null) {
+            this.createdAt = date;
+        }
+        this.updatedAt = date;
     }
 }
