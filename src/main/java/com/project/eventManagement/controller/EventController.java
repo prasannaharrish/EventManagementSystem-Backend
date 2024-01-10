@@ -3,6 +3,7 @@ package com.project.eventManagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,13 @@ public class EventController {
 
         return new ResponseEntity<>(events, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Event>> getEventByCategory(@PathVariable String category) {
+        List<Event> events = eventService.getEventByCategory(category);
+
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 }

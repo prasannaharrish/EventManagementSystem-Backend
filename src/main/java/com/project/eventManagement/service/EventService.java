@@ -17,4 +17,8 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public List<Event> getEventByCategory(String category) {
+        return eventRepository.findByCategory(category);
+    }
+
 }
