@@ -24,4 +24,9 @@ public class UserController {
 
     }
 
+    @GetMapping("/admin/")
+    public String hiAdmin() {
+        return "admin";
+    }
+
 }

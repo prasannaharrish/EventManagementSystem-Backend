@@ -24,7 +24,6 @@ public class TokenService {
     @Autowired
     private JwtEncoder jwtEncoder;
 
-
     public String generateJwt(Authentication auth) {
 
         Instant now = Instant.now();
