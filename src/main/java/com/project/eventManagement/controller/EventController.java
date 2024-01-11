@@ -35,7 +35,7 @@ public class EventController {
 
     }
 
-    @GetMapping("/category/{category}")
+    @GetMapping("/{category}")
     public ResponseEntity<List<Event>> getEventByCategory(@PathVariable String category) {
         List<Event> events = eventService.getEventByCategory(category);
 
