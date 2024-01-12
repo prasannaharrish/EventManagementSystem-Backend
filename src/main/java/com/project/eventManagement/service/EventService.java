@@ -39,12 +39,6 @@ public class EventService {
     public Event createEvent(String title, String location, String description, String date, String time,
             String category) {
 
-        // Authentication authentication =
-        // SecurityContextHolder.getContext().getAuthentication();
-        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // String username = userDetails.getUsername();
-        // User user = userRepository.findByUsername(username).get();
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User creator = (User) userService.loadUserByUsername(username);

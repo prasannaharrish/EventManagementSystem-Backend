@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/users/**").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("/events/all").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/events/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/events/{category}").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
