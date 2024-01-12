@@ -1,6 +1,7 @@
 package com.project.eventManagement.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -20,7 +22,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long eventId; // primary key of the entity;
+    private Long eventId;
 
     private String title;
     private String location;
@@ -29,8 +31,11 @@ public class Event {
     private String time;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "createdBy")
+    private User creator;
+
+    @ManyToMany(mappedBy = "participatingEvents", fetch = FetchType.EAGER)
+    private Set<User> participants;
 
     @Column(name = "category")
     private String category;
@@ -46,14 +51,16 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String location, String description, String date, String time, User user,
+    public Event(String title, String location, String description, String date, String time, User creator,
+            Set<User> participants,
             String category) {
         this.title = title;
         this.location = location;
         this.description = description;
         this.date = date;
         this.time = time;
-        this.user = user;
+        this.creator = creator;
+        this.participants = participants;
         this.category = category;
         this.createdAt = new Date();
         this.updatedAt = new Date();
@@ -103,12 +110,20 @@ public class Event {
         this.description = description;
     }
 
-    public User getUser() {
-        return user;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Set<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
     }
 
     public String getCategory() {

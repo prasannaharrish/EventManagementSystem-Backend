@@ -42,6 +42,11 @@ public class User implements UserDetails {
             @JoinColumn(name = "roleId") })
     private Set<Role> authorities;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
+            @JoinColumn(name = "eventId") })
+    private Set<Event> participatingEvents;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt", nullable = false, updatable = false)
     private Date createdAt;
@@ -57,13 +62,14 @@ public class User implements UserDetails {
     }
 
     public User(String firstName, String lastName, String email, String username, String password,
-            Set<Role> authorities) {
+            Set<Role> authorities, Set<Event> participatingEvents) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.participatingEvents = participatingEvents;
     }
 
     public String getFirstName() {
@@ -135,6 +141,14 @@ public class User implements UserDetails {
 
     public void setAuthorities(Set<Role> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<Event> getParticipatingEvents() {
+        return participatingEvents;
+    }
+
+    public void setParticipatingEvents(Set<Event> participatingEvents) {
+        this.participatingEvents = participatingEvents;
     }
 
     @Override

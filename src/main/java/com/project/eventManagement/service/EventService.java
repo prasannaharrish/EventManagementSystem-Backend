@@ -1,6 +1,9 @@
 package com.project.eventManagement.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +25,9 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
@@ -33,15 +39,20 @@ public class EventService {
     public Event createEvent(String title, String location, String description, String date, String time,
             String category) {
 
+        // Authentication authentication =
+        // SecurityContextHolder.getContext().getAuthentication();
+        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        // String username = userDetails.getUsername();
+        // User user = userRepository.findByUsername(username).get();
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User creator = (User) userService.loadUserByUsername(username);
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Set<User> participants = new HashSet<>();
 
-        String username = userDetails.getUsername();
-
-        User user = userRepository.findByUsername(username).get();
-
-        return eventRepository.save(new Event(title, location, description, date, time, user, category));
+        return eventRepository
+                .save(new Event(title, location, description, date, time, creator, participants, category));
 
     }
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.eventManagement.dto.LoginResponseDTO;
+import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.Role;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.repository.RoleRepository;
@@ -45,7 +46,10 @@ public class AuthenticationService {
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        return userRepository.save(new User(firstName, lastName, email, username, encodedPassword, authorities));
+        Set<Event> participatingEvents = new HashSet<>();
+
+        return userRepository.save(
+                new User(firstName, lastName, email, username, encodedPassword, authorities, participatingEvents));
 
     }
 
