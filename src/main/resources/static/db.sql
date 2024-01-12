@@ -1,4 +1,53 @@
--- creating sample users;
+CREATE TABLE user (
+    userId BIGINT PRIMARY KEY AUTO_INCREMENT,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    email VARCHAR(255),
+    username VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE event (
+    eventId BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255),
+    location VARCHAR(255),
+    description VARCHAR(255),
+    date VARCHAR(255),
+    time VARCHAR(255),
+    createdBy BIGINT,
+    category VARCHAR(255),
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (createdBy) REFERENCES user(userId)
+);
+
+CREATE TABLE roles (
+    roleId BIGINT PRIMARY KEY AUTO_INCREMENT,
+    authority VARCHAR(255) UNIQUE
+);
+
+
+CREATE TABLE user_role (
+    userId BIGINT,
+    roleId BIGINT,
+    PRIMARY KEY (userId, roleId),
+    FOREIGN KEY (userId) REFERENCES user(userId),
+    FOREIGN KEY (roleId) REFERENCES roles(roleId)
+);
+
+CREATE TABLE user_event (
+    userId BIGINT,
+    eventId BIGINT,
+    PRIMARY KEY (userId, eventId),
+    FOREIGN KEY (userId) REFERENCES user(userId),
+    FOREIGN KEY (eventId) REFERENCES event(eventId)
+);
+
+
+
 
 INSERT INTO User (username, password, email, first_name, last_name,created_at, updated_at) VALUES
     ('user1', 'pass1', 'user1@example.com', 'John', 'Doe',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

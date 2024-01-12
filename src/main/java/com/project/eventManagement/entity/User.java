@@ -178,6 +178,7 @@ public class User implements UserDetails {
 
         if (this.createdAt == null) {
             this.createdAt = date;
+            this.updatedAt = date;
         }
         this.updatedAt = date;
     }
