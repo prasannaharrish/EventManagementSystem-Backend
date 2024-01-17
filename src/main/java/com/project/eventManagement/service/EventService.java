@@ -14,16 +14,12 @@ import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.repository.EventRepository;
-import com.project.eventManagement.repository.UserRepository;
 
 @Service
 public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
