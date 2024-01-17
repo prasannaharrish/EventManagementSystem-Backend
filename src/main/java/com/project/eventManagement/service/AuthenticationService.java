@@ -43,13 +43,10 @@ public class AuthenticationService {
         String encodedPassword = passwordEncoder.encode(password);
         Role userRole = roleRepository.findByAuthority("USER").get();
 
-        Set<Role> authorities = new HashSet<>();
-        authorities.add(userRole);
-
         Set<Event> participatingEvents = new HashSet<>();
 
         return userRepository.save(
-                new User(firstName, lastName, email, username, encodedPassword, authorities, participatingEvents));
+                new User(firstName, lastName, email, username, encodedPassword, userRole, participatingEvents));
 
     }
 

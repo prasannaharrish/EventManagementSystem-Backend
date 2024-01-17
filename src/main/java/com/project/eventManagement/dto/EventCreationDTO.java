@@ -1,13 +1,17 @@
 package com.project.eventManagement.dto;
 
+import java.sql.Timestamp;
+
+import com.project.eventManagement.entity.Category;
+
 public class EventCreationDTO {
 
     private String title;
     private String location;
     private String description;
-    private String date;
-    private String time;
-    private String category;
+    private Timestamp date;
+    private Timestamp time;
+    private Category category;
 
     public String getTitle() {
         return title;
@@ -33,27 +37,27 @@ public class EventCreationDTO {
         this.description = description;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public String getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

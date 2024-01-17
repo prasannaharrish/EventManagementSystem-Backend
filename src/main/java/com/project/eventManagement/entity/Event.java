@@ -1,5 +1,6 @@
 package com.project.eventManagement.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -22,38 +23,50 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "event_id")
     private Long eventId;
 
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "location")
     private String location;
+
+    @Column(name = "description")
     private String description;
-    private String date;
-    private String time;
+
+    @Column(name = "date")
+    private Timestamp date;
+
+    @Column(name = "time")
+    private Timestamp time;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "createdBy")
+    @JoinColumn(name = "created_by")
     private User creator;
 
     @ManyToMany(mappedBy = "participatingEvents", fetch = FetchType.EAGER)
     private Set<User> participants;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     @Column(name = "category")
-    private String category;
+    private Category category;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updatedAt", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     public Event() {
     }
 
-    public Event(String title, String location, String description, String date, String time, User creator,
+    public Event(String title, String location, String description, Timestamp date, Timestamp time, User creator,
             Set<User> participants,
-            String category) {
+            Category category) {
         this.title = title;
         this.location = location;
         this.description = description;
@@ -78,19 +91,19 @@ public class Event {
         this.title = title;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public String getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
@@ -126,11 +139,11 @@ public class Event {
         this.participants = participants;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

@@ -1,11 +1,12 @@
 package com.project.eventManagement.entity;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -17,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -28,47 +30,52 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(unique = true)
+    @Column(name = "username", unique = true)
     private String username;
 
+    @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
-            @JoinColumn(name = "roleId") })
-    private Set<Role> authorities;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role authority;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
-            @JoinColumn(name = "eventId") })
+    @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "event_id") })
     private Set<Event> participatingEvents;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updatedAt", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     public User() {
         super();
-        this.authorities = new HashSet<Role>();
+        this.authority = new Role();
 
     }
 
     public User(String firstName, String lastName, String email, String username, String password,
-            Set<Role> authorities, Set<Event> participatingEvents) {
+            Role authority, Set<Event> participatingEvents) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.authorities = authorities;
+        this.authority = authority;
         this.participatingEvents = participatingEvents;
     }
 
@@ -136,11 +143,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return Collections.singleton(new SimpleGrantedAuthority(authority.getAuthority()));
     }
 
-    public void setAuthorities(Set<Role> authorities) {
-        this.authorities = authorities;
+    public void setAuthority(Role authority) {
+        this.authority = authority;
     }
 
     public Set<Event> getParticipatingEvents() {

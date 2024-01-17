@@ -1,5 +1,6 @@
 package com.project.eventManagement.service;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,10 +8,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.project.eventManagement.dto.EventCreationDTO;
+import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.repository.EventRepository;
@@ -36,8 +36,8 @@ public class EventService {
         return eventRepository.findByCategory(category);
     }
 
-    public Event createEvent(String title, String location, String description, String date, String time,
-            String category) {
+    public Event createEvent(String title, String location, String description, Timestamp date, Timestamp time,
+            Category category) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
