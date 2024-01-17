@@ -32,7 +32,7 @@ public class EventService {
         return eventRepository.findByCategory(category);
     }
 
-    public Event createEvent(String title, String location, String description, Timestamp date, Timestamp time,
+    public Event createEvent(String title, String location, String description, Timestamp dateTime,
             Category category) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +42,7 @@ public class EventService {
         Set<User> participants = new HashSet<>();
 
         return eventRepository
-                .save(new Event(title, location, description, date, time, creator, participants, category));
+                .save(new Event(title, location, description, dateTime, creator, participants, category));
 
     }
 

@@ -9,8 +9,7 @@ public class EventCreationDTO {
     private String title;
     private String location;
     private String description;
-    private Timestamp date;
-    private Timestamp time;
+    private Timestamp dateTime;
     private Category category;
 
     public String getTitle() {
@@ -37,20 +36,12 @@ public class EventCreationDTO {
         this.description = description;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public Timestamp getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Category getCategory() {

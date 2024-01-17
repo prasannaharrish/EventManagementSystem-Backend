@@ -35,11 +35,8 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
-    private Timestamp date;
-
-    @Column(name = "time")
-    private Timestamp time;
+    @Column(name = "event_datetime")
+    private Timestamp dateTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by")
@@ -64,14 +61,13 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String location, String description, Timestamp date, Timestamp time, User creator,
+    public Event(String title, String location, String description, Timestamp dateTime, User creator,
             Set<User> participants,
             Category category) {
         this.title = title;
         this.location = location;
         this.description = description;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.creator = creator;
         this.participants = participants;
         this.category = category;
@@ -91,20 +87,12 @@ public class Event {
         this.title = title;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public Timestamp getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getLocation() {

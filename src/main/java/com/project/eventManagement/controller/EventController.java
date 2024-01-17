@@ -42,7 +42,7 @@ public class EventController {
     @PostMapping("/create")
     public ResponseEntity<Event> createEvent(@RequestBody EventCreationDTO eventCreationDTO) {
         Event event = eventService.createEvent(eventCreationDTO.getTitle(), eventCreationDTO.getLocation(),
-                eventCreationDTO.getDescription(), eventCreationDTO.getDate(), eventCreationDTO.getTime(),
+                eventCreationDTO.getDescription(), eventCreationDTO.getDateTime(),
                 eventCreationDTO.getCategory());
 
         return new ResponseEntity<>(event, HttpStatus.OK);
