@@ -1,6 +1,6 @@
 package com.project.eventManagement.controller;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,52 +9,50 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.eventManagement.dto.EventCreationDTO;
-import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.service.EventService;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/events")
+@RequestMapping
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/all")
+    @GetMapping("/events/all")
     public ResponseEntity<List<Event>> getAllEventS() {
 
         List<Event> events = eventService.getAllEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/past")
-    public ResponseEntity<List<Event>> getPastEvents() {
-        List<Event> events = eventService.getPastEvents();
+    @GetMapping("events/{filter}")
+    public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
+        List<Event> events = new ArrayList<>();
+        if (filter.equals("past")) {
+            events = eventService.getPastEvents();
+        } else if (filter.equals("live")) {
+            events = eventService.getLiveEvents();
+        } else if (filter.equals("upcoming")) {
+            events = eventService.getUpcomingEvents();
+        } else {
+            events = null;
+        }
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/live")
-    public ResponseEntity<List<Event>> getLiveEvents() {
-        List<Event> events = eventService.getLiveEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
 
-    @GetMapping("/upcoming")
-    public ResponseEntity<List<Event>> getUpcomingEvents() {
-        List<Event> events = eventService.getUpcomingEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
 
-    @GetMapping("/{category}")
-    public ResponseEntity<List<Event>> getEventByCategory(@PathVariable String category) {
-        List<Event> events = eventService.getEventByCategory(category);
+    @GetMapping("/events")
+    public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId) {
+        List<Event> events = eventService.getEventByCategory(categoryId);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 

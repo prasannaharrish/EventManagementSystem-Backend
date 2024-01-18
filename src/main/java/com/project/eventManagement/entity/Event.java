@@ -1,6 +1,5 @@
 package com.project.eventManagement.entity;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;

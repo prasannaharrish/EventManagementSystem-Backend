@@ -11,7 +11,7 @@ import com.project.eventManagement.entity.Event;
 // 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findByCategoryCategory(String category);
+    List<Event> findByCategoryCategoryId(int categoryId);
 
     List<Event> findByEndTimeBefore(Date curDate);
 

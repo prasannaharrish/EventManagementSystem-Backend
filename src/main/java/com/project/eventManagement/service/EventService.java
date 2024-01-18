@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
@@ -41,8 +42,8 @@ public class EventService {
         return eventRepository.findByStartTimeAfter(new Date());
     }
 
-    public List<Event> getEventByCategory(String category) {
-        return eventRepository.findByCategoryCategory(category);
+    public List<Event> getEventByCategory(@RequestParam(required = true) int categoryId) {
+        return eventRepository.findByCategoryCategoryId(categoryId);
     }
 
     public Event createEvent(String title, String location, String description, Timestamp startTime, Timestamp endTime,
