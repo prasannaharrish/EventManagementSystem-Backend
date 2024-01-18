@@ -1,5 +1,6 @@
 package com.project.eventManagement.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,11 @@ import com.project.eventManagement.entity.Event;
 // 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findByCategory(String category);
+    List<Event> findByCategoryCategory(String category);
 
+    List<Event> findByEndTimeBefore(Date curDate);
+
+    List<Event> findByStartTimeBeforeAndEndTimeAfter(Date curDate,Date curDate2);
+
+    List<Event> findByStartTimeAfter(Date curDate);
 }

@@ -1,5 +1,6 @@
 package com.project.eventManagement.entity;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
@@ -35,8 +36,11 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "event_datetime")
-    private Timestamp dateTime;
+    @Column(name = "event_start_time")
+    private Timestamp startTime;
+
+    @Column(name = "event_end_time")
+    private Timestamp endTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by")
@@ -47,7 +51,6 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @Column(name = "category")
     private Category category;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,13 +64,15 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String location, String description, Timestamp dateTime, User creator,
+    public Event(String title, String location, String description, Timestamp startTime, Timestamp endTime,
+            User creator,
             Set<User> participants,
             Category category) {
         this.title = title;
         this.location = location;
         this.description = description;
-        this.dateTime = dateTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.creator = creator;
         this.participants = participants;
         this.category = category;
@@ -87,12 +92,20 @@ public class Event {
         this.title = title;
     }
 
-    public Timestamp getDateTime() {
-        return dateTime;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setDateTime(Timestamp dateTime) {
-        this.dateTime = dateTime;
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 
     public String getLocation() {

@@ -1,6 +1,7 @@
 package com.project.eventManagement.service;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,11 +29,23 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public List<Event> getEventByCategory(String category) {
-        return eventRepository.findByCategory(category);
+    public List<Event> getPastEvents() {
+        return eventRepository.findByEndTimeBefore(new Date());
     }
 
-    public Event createEvent(String title, String location, String description, Timestamp dateTime,
+    public List<Event> getLiveEvents() {
+        return eventRepository.findByStartTimeBeforeAndEndTimeAfter(new Date(), new Date());
+    }
+
+    public List<Event> getUpcomingEvents() {
+        return eventRepository.findByStartTimeAfter(new Date());
+    }
+
+    public List<Event> getEventByCategory(String category) {
+        return eventRepository.findByCategoryCategory(category);
+    }
+
+    public Event createEvent(String title, String location, String description, Timestamp startTime, Timestamp endTime,
             Category category) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +55,7 @@ public class EventService {
         Set<User> participants = new HashSet<>();
 
         return eventRepository
-                .save(new Event(title, location, description, dateTime, creator, participants, category));
+                .save(new Event(title, location, description, startTime, endTime, creator, participants, category));
 
     }
 
