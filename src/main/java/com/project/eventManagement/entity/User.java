@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class User implements UserDetails {
@@ -44,6 +45,9 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "phone", unique = true)
+    private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -68,13 +72,14 @@ public class User implements UserDetails {
 
     }
 
-    public User(String firstName, String lastName, String email, String username, String password,
+    public User(String firstName, String lastName, String email, String username, String password, String phone,
             Role authority, Set<Event> participatingEvents) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.phone = phone;
         this.authority = authority;
         this.participatingEvents = participatingEvents;
     }
@@ -123,6 +128,14 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Date getCreatedAt() {

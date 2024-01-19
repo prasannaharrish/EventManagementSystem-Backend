@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
+import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.repository.EventRepository;
 
 @Service
@@ -46,8 +47,12 @@ public class EventService {
         return eventRepository.findByCategoryCategoryId(categoryId);
     }
 
-    public Event getEventById(@RequestParam(required = true) Long eventId) {
-        return eventRepository.findByEventId(eventId);
+    public Event getEventById(@RequestParam(required = true) Long eventId) throws EventNotFoundException {
+        Event event = eventRepository.findByEventId(eventId);
+        if (event != null) {
+            return event;
+        } else
+            throw new EventNotFoundException("Event not found with the id:" + eventId);
     }
 
     public List<Event> getEventsBetweenTimeRange(Timestamp startTime, Timestamp endTime) {

@@ -1,12 +1,33 @@
 package com.project.eventManagement.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 public class RegistrationDTO {
 
+    @NotEmpty(message = "Firstname cannot be empty ")
     private String firstName;
+
+    @NotEmpty(message = "Lastname cannot be empty ")
     private String lastName;
+
+    @Email(message = "Invalid Email")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
+
+    @NotEmpty(message = "Username cannot be empty")
+    @Min(8)
+    @Max(15)
     private String username;
+
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
+
+    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid mobile number")
+    private String phone;
 
     public String getFirstName() {
         return firstName;
@@ -40,6 +61,14 @@ public class RegistrationDTO {
         this.password = password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -52,12 +81,14 @@ public class RegistrationDTO {
         super();
     }
 
-    public RegistrationDTO(String firstName, String lastName, String email, String username, String password) {
+    public RegistrationDTO(String firstName, String lastName, String email, String username, String password,
+            String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.phone = phone;
     }
 
     @Override
@@ -65,7 +96,5 @@ public class RegistrationDTO {
         return "RegistrationDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", username="
                 + username + ", password=" + password + "]";
     }
-
-    
 
 }

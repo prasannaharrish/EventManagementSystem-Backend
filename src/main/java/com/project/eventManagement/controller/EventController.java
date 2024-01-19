@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.dto.EventFilterDTO;
 import com.project.eventManagement.entity.Event;
+import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.service.EventService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +36,8 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<Event> getEventByEventId(@RequestParam(required = true) long eventId) {
+    public ResponseEntity<Event> getEventByEventId(@RequestParam(required = true) long eventId)
+            throws EventNotFoundException {
         Event event = eventService.getEventById(eventId);
         return new ResponseEntity<>(event, HttpStatus.OK);
 
