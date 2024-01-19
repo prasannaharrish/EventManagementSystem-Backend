@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.eventManagement.dto.EventCreationDTO;
+import com.project.eventManagement.dto.EventFilterDTO;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.service.EventService;
 
@@ -33,6 +34,13 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+    @GetMapping("/events")
+    public ResponseEntity<Event> getEventByEventId(@RequestParam(required = true) long eventId) {
+        Event event = eventService.getEventById(eventId);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+
+    }
+
     @GetMapping("events/{filter}")
     public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
         List<Event> events = new ArrayList<>();
@@ -48,11 +56,16 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-
-
-    @GetMapping("/events")
+    @GetMapping("/events/category")
     public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId) {
         List<Event> events = eventService.getEventByCategory(categoryId);
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @PostMapping("/events/timerange")
+    public ResponseEntity<List<Event>> getEventsBetweenTimeRange(@RequestBody EventFilterDTO eventFilterDTO) {
+        List<Event> events = eventService.getEventsBetweenTimeRange(eventFilterDTO.getStartDate(),
+                eventFilterDTO.getEndDate());
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 

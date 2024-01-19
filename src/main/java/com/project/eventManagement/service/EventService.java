@@ -46,6 +46,15 @@ public class EventService {
         return eventRepository.findByCategoryCategoryId(categoryId);
     }
 
+    public Event getEventById(@RequestParam(required = true) Long eventId) {
+        return eventRepository.findByEventId(eventId);
+    }
+
+    public List<Event> getEventsBetweenTimeRange(Timestamp startTime, Timestamp endTime) {
+        return eventRepository.findByStartTimeBetween(startTime, endTime);
+
+    }
+
     public Event createEvent(String title, String location, String description, Timestamp startTime, Timestamp endTime,
             Category category) {
 
