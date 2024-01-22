@@ -2,6 +2,7 @@ package com.project.eventManagement.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -58,6 +59,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/users/**").hasAnyRole("USER");
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("/events/**").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/event/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

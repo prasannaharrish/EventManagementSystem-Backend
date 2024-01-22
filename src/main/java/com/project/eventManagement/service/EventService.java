@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,8 +18,10 @@ import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.EventNotFoundException;
+import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
+import com.project.eventManagement.repository.UserRepository;
 
 @Service
 public class EventService {
@@ -27,6 +30,9 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -70,17 +76,22 @@ public class EventService {
     }
 
     public Event createEvent(String title, String location, String description, Timestamp startTime, Timestamp endTime,
-            Category category) {
+            int categoryId) throws InvalidCategoryIdException {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User creator = (User) userService.loadUserByUsername(username);
-
+        User currentUser = getCurrentUser();
         Set<User> participants = new HashSet<>();
-
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new InvalidCategoryIdException("Invalid category id:"));
         return eventRepository
-                .save(new Event(title, location, description, startTime, endTime, creator, participants, category));
+                .saveAndFlush(new Event(title, location, description, startTime, endTime, currentUser, participants,
+                        category));
+    }
 
+    private User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).get();
+        return user;
     }
 
 }

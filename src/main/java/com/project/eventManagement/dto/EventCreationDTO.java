@@ -2,16 +2,28 @@ package com.project.eventManagement.dto;
 
 import java.sql.Timestamp;
 
-import com.project.eventManagement.entity.Category;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class EventCreationDTO {
 
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
+
+    @NotEmpty(message = "Location cannot be empty")
     private String location;
+
+    @NotEmpty(message = "Description cannot be empty")
     private String description;
+
+    @NotNull(message = "StartTime cannot be empty")
     private Timestamp startTime;
+
+    @NotNull(message = "EndTime cannot be empty")
     private Timestamp endTime;
-    private Category category;
+
+    @NotNull(message = "Category Id cannot be empty")
+    private int categoryId;
 
     public String getTitle() {
         return title;
@@ -45,12 +57,12 @@ public class EventCreationDTO {
         this.startTime = startTime;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Timestamp getEndTime() {

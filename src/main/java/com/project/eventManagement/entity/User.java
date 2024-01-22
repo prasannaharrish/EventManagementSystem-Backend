@@ -202,4 +202,12 @@ public class User implements UserDetails {
         }
         this.updatedAt = date;
     }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + ", username=" + username + ", password=" + password + ", phone=" + phone + ", authority=" + authority
+                + ", participatingEvents=" + participatingEvents + ", createdAt=" + createdAt + ", updatedAt="
+                + updatedAt + "]";
+    }
 }

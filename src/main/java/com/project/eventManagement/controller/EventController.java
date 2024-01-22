@@ -16,6 +16,7 @@ import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.dto.EventFilterDTO;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.exception.EventNotFoundException;
+import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.service.EventService;
 
 import jakarta.validation.Valid;
@@ -75,11 +76,12 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Event> createEvent(@RequestBody EventCreationDTO eventCreationDTO) {
+    @PostMapping("/event/create")
+    public ResponseEntity<Event> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO)
+            throws InvalidCategoryIdException {
         Event event = eventService.createEvent(eventCreationDTO.getTitle(), eventCreationDTO.getLocation(),
                 eventCreationDTO.getDescription(), eventCreationDTO.getStartTime(), eventCreationDTO.getEndTime(),
-                eventCreationDTO.getCategory());
+                eventCreationDTO.getCategoryId());
 
         return new ResponseEntity<>(event, HttpStatus.OK);
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.project.eventManagement.exception.EventNotFoundException;
+import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.exception.UserNotFoundException;
 
 @RestControllerAdvice
@@ -41,7 +42,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleTimestampRequestError(HttpMessageNotReadableException exception) {
+    public ResponseEntity<Map<String, String>> handleInvalidRequestError(HttpMessageNotReadableException exception) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", exception.getMessage());
         return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
@@ -54,5 +55,13 @@ public class ApplicationExceptionHandler {
         errorMap.put("error", exception.getMessage());
         return new ResponseEntity<>(errorMap, HttpStatus.UNAUTHORIZED);
 
+    }
+
+    @ExceptionHandler(InvalidCategoryIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleInvalidCategoryId(InvalidCategoryIdException exception) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error", exception.getMessage());
+        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
     }
 }
