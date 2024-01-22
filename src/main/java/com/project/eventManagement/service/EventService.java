@@ -16,6 +16,7 @@ import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.EventNotFoundException;
+import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
 
 @Service
@@ -23,6 +24,8 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private UserService userService;
@@ -43,8 +46,10 @@ public class EventService {
         return eventRepository.findByStartTimeAfter(new Date());
     }
 
-    public List<Event> getEventByCategory(@RequestParam(required = true) int categoryId) {
-        return eventRepository.findByCategoryCategoryId(categoryId);
+    public List<Event> getEventByCategory(@RequestParam(required = true) int categoryId) throws EventNotFoundException {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new EventNotFoundException("Event not found with the invalid category id :" + categoryId));
+        return eventRepository.findByCategory(category);
     }
 
     public Event getEventById(@RequestParam(required = true) Long eventId) throws EventNotFoundException {

@@ -43,6 +43,13 @@ public class EventController {
 
     }
 
+    @GetMapping("/events/category")
+    public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId)
+            throws EventNotFoundException {
+        List<Event> events = eventService.getEventByCategory(categoryId);
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
     @GetMapping("events/{filter}")
     public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
         List<Event> events = new ArrayList<>();
@@ -55,12 +62,6 @@ public class EventController {
         } else {
             events = null;
         }
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
-
-    @GetMapping("/events/category")
-    public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId) {
-        List<Event> events = eventService.getEventByCategory(categoryId);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 

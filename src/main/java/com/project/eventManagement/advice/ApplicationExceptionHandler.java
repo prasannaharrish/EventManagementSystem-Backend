@@ -27,12 +27,14 @@ public class ApplicationExceptionHandler {
 
     }
 
-    // @ExceptionHandler(EventNotFoundException.class)
-    // @ResponseStatus(HttpStatus.BAD_REQUEST)
-    // public ResponseEntity<Map<String, String>> handleEventNotFound(EventNotFoundException exception) {
-    //     Map<String, String> errorMap = new HashMap<>();
-    //     errorMap.p
+    @ExceptionHandler(EventNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleEventNotFound(EventNotFoundException exception) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error", exception.getMessage());
 
-    // }
+        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+
+    }
 
 }

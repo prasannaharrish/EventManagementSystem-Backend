@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import java.sql.Timestamp;
 
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 // 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findByCategoryCategoryId(int categoryId);
+    List<Event> findByCategory(Category category);
 
     Event findByEventId(Long eventId);
 
