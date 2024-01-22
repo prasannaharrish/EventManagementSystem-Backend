@@ -43,4 +43,9 @@ public class Category {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "Category [categoryId=" + categoryId + ", category=" + category + "]";
+    }
+
 }

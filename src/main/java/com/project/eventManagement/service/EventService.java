@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,13 @@ public class EventService {
         return eventRepository.findByStartTimeAfter(new Date());
     }
 
-    public List<Event> getEventByCategory(@RequestParam(required = true) int categoryId) throws EventNotFoundException {
+    public List<Event> getEventByCategory(@RequestParam(required = true) int categoryId)
+            throws EventNotFoundException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new EventNotFoundException("Event not found with the invalid category id :" + categoryId));
-        return eventRepository.findByCategory(category);
+        List<Event> events = eventRepository.findByCategory(category).orElse(null);
+        return events;
+
     }
 
     public Event getEventById(@RequestParam(required = true) Long eventId) throws EventNotFoundException {

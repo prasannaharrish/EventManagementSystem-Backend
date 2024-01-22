@@ -1,8 +1,6 @@
 package com.project.eventManagement.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
@@ -19,8 +17,6 @@ public class RegistrationDTO {
     private String email;
 
     @NotEmpty(message = "Username cannot be empty")
-    @Min(8)
-    @Max(15)
     private String username;
 
     @NotEmpty(message = "Password cannot be empty")

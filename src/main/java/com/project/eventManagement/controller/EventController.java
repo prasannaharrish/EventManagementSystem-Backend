@@ -2,6 +2,7 @@ package com.project.eventManagement.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import com.project.eventManagement.dto.EventFilterDTO;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.service.EventService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +54,7 @@ public class EventController {
     }
 
     @GetMapping("events/{filter}")
-    public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
+    public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) throws EventNotFoundException {
         List<Event> events = new ArrayList<>();
         if (filter.equals("past")) {
             events = eventService.getPastEvents();
@@ -60,13 +63,13 @@ public class EventController {
         } else if (filter.equals("upcoming")) {
             events = eventService.getUpcomingEvents();
         } else {
-            events = null;
+            throw new EventNotFoundException("Event not found with the Invalid Parmater:" + filter);
         }
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
     @PostMapping("/events/timerange")
-    public ResponseEntity<List<Event>> getEventsBetweenTimeRange(@RequestBody EventFilterDTO eventFilterDTO) {
+    public ResponseEntity<List<Event>> getEventsBetweenTimeRange(@RequestBody @Valid EventFilterDTO eventFilterDTO) {
         List<Event> events = eventService.getEventsBetweenTimeRange(eventFilterDTO.getStartDate(),
                 eventFilterDTO.getEndDate());
         return new ResponseEntity<>(events, HttpStatus.OK);

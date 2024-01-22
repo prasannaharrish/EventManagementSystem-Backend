@@ -2,8 +2,14 @@ package com.project.eventManagement.dto;
 
 import java.sql.Timestamp;
 
+import jakarta.validation.constraints.NotNull;
+
 public class EventFilterDTO {
+
+    @NotNull(message = "Start date cannot be empty")
     private Timestamp startDate;
+
+    @NotNull(message = "End date canot be empty")
     private Timestamp endDate;
 
     public Timestamp getStartDate() {

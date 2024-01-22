@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import com.project.eventManagement.dto.LoginResponseDTO;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.Role;
 import com.project.eventManagement.entity.User;
+import com.project.eventManagement.exception.UserNotFoundException;
 import com.project.eventManagement.repository.RoleRepository;
 import com.project.eventManagement.repository.UserRepository;
 
@@ -51,18 +53,20 @@ public class AuthenticationService {
 
     }
 
-    public LoginResponseDTO loginUser(String username, String password) {
+    public LoginResponseDTO loginUser(String email, String password) throws UserNotFoundException {
+
         try {
             Authentication auth = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
+                    .authenticate(new UsernamePasswordAuthenticationToken(email, password));
             String token = tokenService.generateJwt(auth);
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-            return new LoginResponseDTO(userRepository.findByUsername(username).get(), token);
+            return new LoginResponseDTO(user, token);
+        } catch (AuthenticationException exception) {
+            throw new UserNotFoundException("Invalid credentials");
 
-        } catch (AuthenticationException e) {
-            return new LoginResponseDTO(null, "");
         }
-    }
 
+    }
 }

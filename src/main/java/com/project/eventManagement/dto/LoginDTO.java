@@ -1,20 +1,23 @@
 package com.project.eventManagement.dto;
 
+import jakarta.validation.constraints.Email;
+
 public class LoginDTO {
 
-    private String username;
+    @Email(message = "Enter a valid Email")
+    private String email;
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
@@ -23,7 +26,7 @@ public class LoginDTO {
 
     @Override
     public String toString() {
-        return "LoginDTO [username=" + username + ", password=" + password + "]";
+        return "LoginDTO [username=" + email + ", password=" + password + "]";
     }
 
 }

@@ -12,6 +12,8 @@ import com.project.eventManagement.dto.LoginDTO;
 import com.project.eventManagement.dto.LoginResponseDTO;
 import com.project.eventManagement.dto.RegistrationDTO;
 import com.project.eventManagement.entity.User;
+import com.project.eventManagement.exception.EventNotFoundException;
+import com.project.eventManagement.exception.UserNotFoundException;
 import com.project.eventManagement.service.AuthenticationService;
 
 import jakarta.validation.Valid;
@@ -32,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO loginUser(@RequestBody LoginDTO loginDTO) {
-        return authenticationService.loginUser(loginDTO.getUsername(), loginDTO.getPassword());
+    public LoginResponseDTO loginUser(@RequestBody @Valid LoginDTO loginDTO) throws UserNotFoundException {
+        return authenticationService.loginUser(loginDTO.getEmail(), loginDTO.getPassword());
     }
 }
