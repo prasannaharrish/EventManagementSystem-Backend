@@ -14,14 +14,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.eventManagement.advice.ErrorResponse;
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
+import com.project.eventManagement.exception.ParticipationNotValidException;
 import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
 import com.project.eventManagement.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EventService {
@@ -85,6 +89,39 @@ public class EventService {
         return eventRepository
                 .saveAndFlush(new Event(title, location, description, startTime, endTime, currentUser, participants,
                         category));
+    }
+
+    public Event participateInAnEvent(Long eventId) {
+        try {
+            Event event = eventRepository.findByEventId(eventId);
+            System.out.println(event.toString());
+            Timestamp eventStartTime = event.getStartTime();
+            System.out.println(eventStartTime);
+            Instant currentInstant = Instant.now();
+
+            if (eventStartTime.toInstant().isAfter(currentInstant)) {
+                User participant = getCurrentUser();
+                System.out.println(participant.toString());
+
+                if (event.getCreator().equals(participant)) {
+                    throw new ParticipationNotValidException("You cannot participate in the Event you created");
+                } else {
+                    System.out.println(event.getParticipants());
+                    event.getParticipants().add(participant);
+                    eventRepository.saveAndFlush(event);
+                    System.out.println(event.toString());
+                    System.out.println(participant.getParticipatingEvents());
+                    participant.getParticipatingEvents().add(event);
+                    userRepository.saveAndFlush(participant);
+                    System.out.println(participant.getParticipatingEvents());
+                    return event;
+                }
+            } else {
+                throw new ParticipationNotValidException("Cannot participate in the Event; it has already happened");
+            }
+        } catch (ParticipationNotValidException e) {
+            return null;
+        }
     }
 
     private User getCurrentUser() {

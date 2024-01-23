@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +23,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class User implements UserDetails {
@@ -53,9 +53,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role authority;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "event_id") })
+    @ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Event> participatingEvents;
 
     @Temporal(TemporalType.TIMESTAMP)

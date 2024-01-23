@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
+import com.project.eventManagement.entity.User;
+
 import java.sql.Timestamp;
 
 // the data in the db will be of type Event and the primary key is of type Long
@@ -25,4 +27,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByStartTimeAfter(Date curDate);
 
     List<Event> findByStartTimeBetween(Timestamp startDate, Timestamp endDate);
+
+    List<Event> findByCreator(User creator);
 }

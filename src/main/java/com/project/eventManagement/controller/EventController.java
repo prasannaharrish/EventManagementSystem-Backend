@@ -77,15 +77,6 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @PostMapping("/event/create")
-    public ResponseEntity<Event> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO)
-            throws InvalidCategoryIdException, IllegalArgumentException, MethodArgumentNotValidException {
-        Event event = eventService.createEvent(eventCreationDTO.getTitle(), eventCreationDTO.getLocation(),
-                eventCreationDTO.getDescription(), eventCreationDTO.getStartTime(), eventCreationDTO.getEndTime(),
-                eventCreationDTO.getCategoryId());
 
-        return new ResponseEntity<>(event, HttpStatus.OK);
-
-    }
 
 }
