@@ -1,5 +1,6 @@
 package com.project.eventManagement.advice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.exception.UserNotFoundException;
@@ -20,48 +20,57 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleInvalidArguments(MethodArgumentNotValidException exception) {
-        Map<String, String> errorMap = new HashMap<>();
+    public ResponseEntity<ArrayList<ErrorResponse>> handleInvalidArguments(MethodArgumentNotValidException exception) {
+        ArrayList<ErrorResponse> errorList = new ArrayList<>();
         exception.getBindingResult().getFieldErrors().forEach(error -> {
-            errorMap.put(error.getField(), error.getDefaultMessage());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(), error.getDefaultMessage());
+            errorList.add(errorResponse);
         });
-
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorList, HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(EventNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleEventNotFound(EventNotFoundException exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("Error", exception.getMessage());
-
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleEventNotFound(EventNotFoundException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleInvalidRequestError(HttpMessageNotReadableException exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", exception.getMessage());
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleInvalidRequestError(HttpMessageNotReadableException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Map<String, String>> handleUserNotFound(UserNotFoundException exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", exception.getMessage());
-        return new ResponseEntity<>(errorMap, HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 
     }
 
     @ExceptionHandler(InvalidCategoryIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleInvalidCategoryId(InvalidCategoryIdException exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", exception.getMessage());
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleInvalidCategoryId(InvalidCategoryIdException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleIllegalArguments(IllegalArgumentException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+
     }
 }

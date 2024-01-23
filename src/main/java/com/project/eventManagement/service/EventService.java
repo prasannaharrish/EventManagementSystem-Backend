@@ -1,17 +1,17 @@
 package com.project.eventManagement.service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.eventManagement.entity.Category;
@@ -33,9 +33,6 @@ public class EventService {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
@@ -76,9 +73,12 @@ public class EventService {
     }
 
     public Event createEvent(String title, String location, String description, Timestamp startTime, Timestamp endTime,
-            int categoryId) throws InvalidCategoryIdException {
+            int categoryId)
+            throws InvalidCategoryIdException, IllegalArgumentException, MethodArgumentNotValidException {
 
         User currentUser = getCurrentUser();
+        validateDates(startTime, endTime);
+
         Set<User> participants = new HashSet<>();
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new InvalidCategoryIdException("Invalid category id:"));
@@ -92,6 +92,22 @@ public class EventService {
         String username = auth.getName();
         User user = userRepository.findByUsername(username).get();
         return user;
+    }
+
+    private void validateDates(Timestamp startTime, Timestamp endTime) {
+
+        Instant currentInstant = Instant.now();
+
+        if (startTime.toInstant().isBefore(currentInstant) || endTime.toInstant().isBefore(currentInstant)) {
+            throw new IllegalArgumentException("Start time and End time must be greater than Current Time");
+
+        }
+
+        if (endTime.toInstant().isBefore(startTime.toInstant()) || endTime.toInstant().equals(startTime.toInstant())) {
+            throw new IllegalArgumentException("End time must be greater than Start Time");
+
+        }
+
     }
 
 }
