@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,9 +49,8 @@ public class Event {
     @JoinColumn(name = "created_by")
     private User creator;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "user_id") })
+    @JsonBackReference
+    @ManyToMany(mappedBy = "participatingEvents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<User> participants;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,6 +1,7 @@
 package com.project.eventManagement.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,6 +42,14 @@ public class UserService implements UserDetailsService {
         List<Event> createdEvents = eventRepository.findByCreator(creator);
         return createdEvents;
 
+    }
+
+    public Set<Event> getParticipatedEvents() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username).get();
+        Set<Event> participatingEvents = currentUser.getParticipatingEvents();
+        return participatingEvents;
     }
 
 }

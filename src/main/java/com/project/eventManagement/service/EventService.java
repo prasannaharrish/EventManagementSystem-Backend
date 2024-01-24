@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,20 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.eventManagement.advice.ErrorResponse;
+import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.exception.ParticipationNotValidException;
+import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
+import com.project.eventManagement.repository.RoleRepository;
 import com.project.eventManagement.repository.UserRepository;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -34,6 +39,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -91,37 +98,79 @@ public class EventService {
                         category));
     }
 
-    public Event participateInAnEvent(Long eventId) {
-        try {
-            Event event = eventRepository.findByEventId(eventId);
-            System.out.println(event.toString());
-            Timestamp eventStartTime = event.getStartTime();
-            System.out.println(eventStartTime);
-            Instant currentInstant = Instant.now();
+    public User participateInAnEvent(Long eventId) throws ParticipationNotValidException {
+        Event event = eventRepository.findByEventId(eventId);
+        Timestamp eventStartTime = event.getStartTime();
+        Instant currentInstant = Instant.now();
 
-            if (eventStartTime.toInstant().isAfter(currentInstant)) {
-                User participant = getCurrentUser();
-                System.out.println(participant.toString());
+        if (eventStartTime.toInstant().isAfter(currentInstant)) {
+            User participant = getCurrentUser();
 
-                if (event.getCreator().equals(participant)) {
-                    throw new ParticipationNotValidException("You cannot participate in the Event you created");
-                } else {
-                    System.out.println(event.getParticipants());
-                    event.getParticipants().add(participant);
-                    eventRepository.saveAndFlush(event);
-                    System.out.println(event.toString());
-                    System.out.println(participant.getParticipatingEvents());
-                    participant.getParticipatingEvents().add(event);
-                    userRepository.saveAndFlush(participant);
-                    System.out.println(participant.getParticipatingEvents());
-                    return event;
-                }
+            if (event.getCreator().equals(participant)) {
+                throw new ParticipationNotValidException("You cannot participate in the Event you created");
             } else {
-                throw new ParticipationNotValidException("Cannot participate in the Event; it has already happened");
+                participant.getParticipatingEvents().add(event);
+                userRepository.saveAndFlush(participant);
+                System.out.println("event participants:" + event.getParticipants());
+                return participant;
             }
-        } catch (ParticipationNotValidException e) {
-            return null;
+        } else {
+            throw new ParticipationNotValidException("Cannot participate in the Event; it has already happened");
         }
+    }
+
+    public Set<User> getEventParticipants(Long eventId)
+            throws UnAuthorizedAccessException {
+        Event event = eventRepository.findByEventId(eventId);
+        User currentUser = getCurrentUser();
+        if (event.getCreator().equals(currentUser)) {
+            return event.getParticipants();
+        } else {
+            throw new UnAuthorizedAccessException("You don't have access to view paticipants of this event");
+        }
+
+    }
+
+    public Event modifyEvent(EventCreationDTO eventCreationDTO, Long eventId) {
+        Event eventTomodify = eventRepository.findByEventId(eventId);
+        if (eventTomodify == null) {
+            throw new EventNotFoundException("Event not found with the event id:" + eventId);
+        }
+        Instant currentInstant = Instant.now();
+        if (eventTomodify.getStartTime().toInstant().isBefore(currentInstant)) {
+            throw new IllegalArgumentException("You cannot modify a event that is already happened.");
+        } else {
+            User currentUser = getCurrentUser();
+            if (currentUser.equals(eventTomodify.getCreator())) {
+                eventTomodify.setTitle(eventCreationDTO.getTitle());
+                eventTomodify.setDescription(eventCreationDTO.getDescription());
+                eventTomodify.setLocation(eventCreationDTO.getLocation());
+                eventTomodify.setCategory(categoryRepository.findById(eventCreationDTO.getCategoryId()).get());
+                eventTomodify.setUpdatedAt(new Date());
+                validateDates(eventCreationDTO.getStartTime(), eventCreationDTO.getEndTime());
+                eventTomodify.setStartTime(eventCreationDTO.getStartTime());
+                eventTomodify.setEndTime(eventCreationDTO.getEndTime());
+                return eventRepository.saveAndFlush(eventTomodify);
+            } else {
+                throw new UnAuthorizedAccessException("You don't have access to modify this event");
+            }
+        }
+
+    }
+
+    public Event cancelEvent(Long eventId) {
+        Event eventTocancel = eventRepository.findByEventId(eventId);
+        if (eventTocancel == null) {
+            throw new EventNotFoundException("Event not found with the event id:" + eventId);
+        }
+        User currentUser = getCurrentUser();
+        if (currentUser.equals(eventTocancel.getCreator())) {
+            eventRepository.delete(eventTocancel);
+            return eventTocancel;
+        } else {
+            throw new UnAuthorizedAccessException("You don't have access to delete this event");
+        }
+
     }
 
     private User getCurrentUser() {

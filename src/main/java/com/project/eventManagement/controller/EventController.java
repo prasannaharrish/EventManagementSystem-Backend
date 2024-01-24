@@ -3,6 +3,7 @@ package com.project.eventManagement.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.dto.EventFilterDTO;
 import com.project.eventManagement.entity.Event;
+import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
+import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.service.EventService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -56,7 +60,7 @@ public class EventController {
     }
 
     @GetMapping("events/{filter}")
-    public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) throws EventNotFoundException {
+    public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
         List<Event> events = new ArrayList<>();
         if (filter.equals("past")) {
             events = eventService.getPastEvents();
@@ -76,7 +80,6 @@ public class EventController {
                 eventFilterDTO.getEndDate());
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
-
 
 
 }
