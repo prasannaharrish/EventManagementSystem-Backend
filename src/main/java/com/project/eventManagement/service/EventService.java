@@ -39,8 +39,7 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+
 
     @Autowired
     UserRepository userRepository;
@@ -173,7 +172,7 @@ public class EventService {
 
     }
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userRepository.findByUsername(username).get();

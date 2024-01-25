@@ -1,6 +1,8 @@
 package com.project.eventManagement.service;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
+import com.project.eventManagement.exception.UnAuthorizedAccessException;
+import com.project.eventManagement.exception.UserNotFoundException;
 import com.project.eventManagement.repository.EventRepository;
 import com.project.eventManagement.repository.UserRepository;
 
@@ -24,6 +28,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventService eventService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -52,4 +59,19 @@ public class UserService implements UserDetailsService {
         return participatingEvents;
     }
 
+    public User getUserById(Long userId) {
+        User currUser = eventService.getCurrentUser();
+        System.out.println(currUser);
+        if (currUser.getAuthority().equals("ADMIN")) {
+            Optional<User> user = userRepository.findByUserId(userId);
+            if (user.isPresent()) {
+                return user.get();
+            } else {
+                throw new UserNotFoundException("User not found with the id:" + userId);
+            }
+        } else {
+            throw new UnAuthorizedAccessException("You don't have access to view this user");
+        }
+
+    }
 }

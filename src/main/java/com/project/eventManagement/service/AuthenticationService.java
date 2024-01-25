@@ -53,6 +53,19 @@ public class AuthenticationService {
 
     }
 
+    public User registerAdmin(String firstName, String lastName, String email, String username, String password,
+            String phone) {
+
+        String encodedPassword = passwordEncoder.encode(password);
+        Role userRole = roleRepository.findByAuthority("ADMIN").get();
+
+        Set<Event> participatingEvents = new HashSet<>();
+
+        return userRepository.saveAndFlush(
+                new User(firstName, lastName, email, username, encodedPassword, phone, userRole, participatingEvents));
+
+    }
+
     public LoginResponseDTO loginUser(String email, String password) throws UserNotFoundException {
 
         try {

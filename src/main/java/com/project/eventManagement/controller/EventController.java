@@ -44,7 +44,7 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/events")
+    @GetMapping("/events/category")
     public ResponseEntity<Event> getEventByEventId(@RequestParam(required = true) long eventId)
             throws EventNotFoundException {
         Event event = eventService.getEventById(eventId);
@@ -52,7 +52,7 @@ public class EventController {
 
     }
 
-    @GetMapping("/events/category")
+    @GetMapping("/events")
     public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId)
             throws EventNotFoundException {
         List<Event> events = eventService.getEventByCategory(categoryId);
@@ -80,6 +80,5 @@ public class EventController {
                 eventFilterDTO.getEndDate());
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
-
 
 }

@@ -27,6 +27,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class User implements UserDetails {
@@ -162,6 +163,10 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(authority.getAuthority()));
+    }
+
+    public String getAuthority() {
+        return authority.getAuthority();
     }
 
     public void setAuthority(Role authority) {

@@ -26,7 +26,6 @@ import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.exception.ParticipationNotValidException;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
-import com.project.eventManagement.repository.UserRepository;
 import com.project.eventManagement.service.EventService;
 import com.project.eventManagement.service.UserService;
 
@@ -79,7 +78,7 @@ public class UserController {
         return new ResponseEntity<>(participatingEvents, HttpStatus.OK);
     }
 
-    @GetMapping("/user/events/participants")
+    @GetMapping("/user/events/participated")
     public ResponseEntity<Set<User>> getEventParticipants(@RequestParam(required = true) long eventId)
             throws UnAuthorizedAccessException {
         Set<User> participants = eventService.getEventParticipants(eventId);
@@ -98,6 +97,12 @@ public class UserController {
     public ResponseEntity<Event> cancelEvent(@PathVariable Long eventId) {
         Event deletedEvent = eventService.cancelEvent(eventId);
         return new ResponseEntity<>(deletedEvent, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable @Valid Long userId) {
+        User user = userService.getUserById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/admin/")
