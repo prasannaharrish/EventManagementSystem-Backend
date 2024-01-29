@@ -58,11 +58,12 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("/events/**").permitAll();
+                    auth.requestMatchers("/{filter}-events").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .build();
+                .build(); 
 
     }
 

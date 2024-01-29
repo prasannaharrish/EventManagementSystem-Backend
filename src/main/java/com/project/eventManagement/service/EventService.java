@@ -7,17 +7,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.project.eventManagement.advice.ErrorResponse;
 import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.entity.Category;
 import com.project.eventManagement.entity.Event;
@@ -28,11 +25,9 @@ import com.project.eventManagement.exception.ParticipationNotValidException;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
-import com.project.eventManagement.repository.RoleRepository;
 import com.project.eventManagement.repository.UserRepository;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-import jakarta.transaction.Transactional;
+
 
 @Service
 public class EventService {

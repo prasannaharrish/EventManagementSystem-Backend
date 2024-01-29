@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public Set<Event> getParticipatingEvents(Long userId) {
+    public Set<Event> getParticipatedEvents(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User currentUser = userRepository.findByUsername(username).get();

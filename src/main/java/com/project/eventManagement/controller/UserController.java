@@ -38,7 +38,7 @@ public class UserController {
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/user/home")
+    @GetMapping("/currentUser")
     public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -70,9 +70,9 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/participating")
-    public ResponseEntity<Set<Event>> getParticipatingEvents(@RequestParam(required = false) Long userId) {
-        Set<Event> participatingEvents = userService.getParticipatingEvents(userId);
+    @GetMapping("/participated")
+    public ResponseEntity<Set<Event>> getParticipatedEvents(@RequestParam(required = false) Long userId) {
+        Set<Event> participatingEvents = userService.getParticipatedEvents(userId);
         return new ResponseEntity<>(participatingEvents, HttpStatus.OK);
     }
 
@@ -102,10 +102,4 @@ public class UserController {
         User user = userService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-    @GetMapping("/admin/")
-    public String hiAdmin() {
-        return "admin";
-    }
-
 }
