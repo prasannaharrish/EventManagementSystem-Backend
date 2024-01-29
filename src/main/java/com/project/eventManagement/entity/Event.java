@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.eventManagement.validation.UniqueField;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,5 +1,8 @@
 package com.project.eventManagement.dto;
 
+import com.project.eventManagement.entity.User;
+import com.project.eventManagement.validation.UniqueField;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -14,15 +17,18 @@ public class RegistrationDTO {
 
     @Email(message = "Invalid Email")
     @NotEmpty(message = "Email cannot be empty")
+    @UniqueField(fieldName = "email", className = User.class, message = "Email must be unique")
     private String email;
 
     @NotEmpty(message = "Username cannot be empty")
+    @UniqueField(fieldName = "username", className = User.class, message = "username must be unique")
     private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Invalid mobile number")
+    @UniqueField(fieldName = "phone", className = User.class, message = "phone number must be unique")
     private String phone;
 
     public String getFirstName() {

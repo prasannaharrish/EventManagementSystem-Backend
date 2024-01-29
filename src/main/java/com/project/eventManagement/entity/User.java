@@ -9,9 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.project.eventManagement.validation.UniqueField;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,11 +24,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
@@ -42,16 +43,16 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "phone", unique = true)
+    @Column(name = "phone")
     private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
