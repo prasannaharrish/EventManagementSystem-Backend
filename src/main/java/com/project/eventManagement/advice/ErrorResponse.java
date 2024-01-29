@@ -1,18 +1,24 @@
 package com.project.eventManagement.advice;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ErrorResponse {
     private LocalDateTime timestamp;
     private int status;
     private String error;
-    private String message;
+    private ArrayList<String> messages;
 
-    public ErrorResponse(int status, String error, String message) {
+    public ErrorResponse(int status, String error, ArrayList<String> messages) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;
-        this.message = message;
+        this.messages = messages;
+    }
+
+    public ErrorResponse(String message) {
+        this.timestamp = LocalDateTime.now();
+
     }
 
     public LocalDateTime getTimestamp() {
@@ -39,12 +45,12 @@ public class ErrorResponse {
         this.error = error;
     }
 
-    public String getMessage() {
-        return message;
+    public ArrayList<String> getMessages() {
+        return messages;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(ArrayList<String> messages) {
+        this.messages = messages;
     }
 
 }

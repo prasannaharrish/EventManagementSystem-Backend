@@ -2,10 +2,12 @@ package com.project.eventManagement.service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -39,7 +41,6 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-
 
     @Autowired
     UserRepository userRepository;
@@ -78,7 +79,12 @@ public class EventService {
     }
 
     public List<Event> getEventsBetweenTimeRange(Timestamp startTime, Timestamp endTime) {
-        return eventRepository.findByStartTimeBetween(startTime, endTime);
+        List<Event> events = eventRepository.findByStartTimeBetween(startTime, endTime);
+        events.addAll(eventRepository.findByEndTimeBetween(startTime, endTime));
+        events.addAll(eventRepository.findByEndTimeAfter(endTime));
+        HashSet<Event> uniqueEventsSet = new HashSet<>(events);
+        List<Event> eventsWithoutDuplicates = new ArrayList<>(uniqueEventsSet);
+        return eventsWithoutDuplicates;
 
     }
 
@@ -104,15 +110,11 @@ public class EventService {
 
         if (eventStartTime.toInstant().isAfter(currentInstant)) {
             User participant = getCurrentUser();
+            participant.getParticipatingEvents().add(event);
+            userRepository.saveAndFlush(participant);
+            System.out.println("event participants:" + event.getParticipants());
+            return participant;
 
-            if (event.getCreator().equals(participant)) {
-                throw new ParticipationNotValidException("You cannot participate in the Event you created");
-            } else {
-                participant.getParticipatingEvents().add(event);
-                userRepository.saveAndFlush(participant);
-                System.out.println("event participants:" + event.getParticipants());
-                return participant;
-            }
         } else {
             throw new ParticipationNotValidException("Cannot participate in the Event; it has already happened");
         }
@@ -122,7 +124,7 @@ public class EventService {
             throws UnAuthorizedAccessException {
         Event event = eventRepository.findByEventId(eventId);
         User currentUser = getCurrentUser();
-        if (event.getCreator().equals(currentUser)) {
+        if (event.getCreator().equals(currentUser) || currentUser.getAuthority().equals("ADMIN")) {
             return event.getParticipants();
         } else {
             throw new UnAuthorizedAccessException("You don't have access to view paticipants of this event");
@@ -140,7 +142,7 @@ public class EventService {
             throw new IllegalArgumentException("You cannot modify a event that is already happened.");
         } else {
             User currentUser = getCurrentUser();
-            if (currentUser.equals(eventTomodify.getCreator())) {
+            if (currentUser.equals(eventTomodify.getCreator()) || currentUser.getAuthority().equals("ADMIN")) {
                 eventTomodify.setTitle(eventCreationDTO.getTitle());
                 eventTomodify.setDescription(eventCreationDTO.getDescription());
                 eventTomodify.setLocation(eventCreationDTO.getLocation());
@@ -163,7 +165,7 @@ public class EventService {
             throw new EventNotFoundException("Event not found with the event id:" + eventId);
         }
         User currentUser = getCurrentUser();
-        if (currentUser.equals(eventTocancel.getCreator())) {
+        if (currentUser.equals(eventTocancel.getCreator()) || currentUser.getAuthority().equals("ADMIN")) {
             eventRepository.delete(eventTocancel);
             return eventTocancel;
         } else {

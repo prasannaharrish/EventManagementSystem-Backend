@@ -56,10 +56,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("/events/**").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/event/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

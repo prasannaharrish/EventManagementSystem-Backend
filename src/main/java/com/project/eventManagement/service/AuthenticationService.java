@@ -57,12 +57,12 @@ public class AuthenticationService {
             String phone) {
 
         String encodedPassword = passwordEncoder.encode(password);
-        Role userRole = roleRepository.findByAuthority("ADMIN").get();
+        Role adminRole = roleRepository.findByAuthority("ADMIN").get();
 
         Set<Event> participatingEvents = new HashSet<>();
 
         return userRepository.saveAndFlush(
-                new User(firstName, lastName, email, username, encodedPassword, phone, userRole, participatingEvents));
+                new User(firstName, lastName, email, username, encodedPassword, phone, adminRole, participatingEvents));
 
     }
 

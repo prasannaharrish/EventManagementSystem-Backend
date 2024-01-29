@@ -17,18 +17,18 @@ public class RegistrationDTO {
 
     @Email(message = "Invalid Email")
     @NotEmpty(message = "Email cannot be empty")
-    @UniqueField(fieldName = "email", className = User.class, message = "Email must be unique")
+    @UniqueField(fieldName = "email", className = User.class, message = "There is already an user registered with this Email")
     private String email;
 
     @NotEmpty(message = "Username cannot be empty")
-    @UniqueField(fieldName = "username", className = User.class, message = "username must be unique")
+    @UniqueField(fieldName = "username", className = User.class, message = "Username not available.")
     private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Invalid mobile number")
-    @UniqueField(fieldName = "phone", className = User.class, message = "phone number must be unique")
+    @UniqueField(fieldName = "phone", className = User.class, message = "There is already an user registered with this mobile")
     private String phone;
 
     public String getFirstName() {

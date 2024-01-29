@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.project.eventManagement.advice.ErrorResponse;
 import com.project.eventManagement.dto.EventCreationDTO;
 import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
@@ -49,7 +47,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/events/create")
+    @PostMapping("/create")
     public ResponseEntity<Event> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO)
             throws InvalidCategoryIdException, IllegalArgumentException, MethodArgumentNotValidException {
         Event event = eventService.createEvent(eventCreationDTO.getTitle(), eventCreationDTO.getLocation(),
@@ -60,25 +58,25 @@ public class UserController {
 
     }
 
-    @GetMapping("/user/events/created")
-    public ResponseEntity<List<Event>> getCreatedEvents() {
-        List<Event> createdEvents = userService.getCreatedEvents();
+    @GetMapping("/created")
+    public ResponseEntity<List<Event>> getCreatedEvents(@RequestParam(required = false) Long userId) {
+        List<Event> createdEvents = userService.getCreatedEvents(userId);
         return new ResponseEntity<>(createdEvents, HttpStatus.OK);
     }
 
-    @GetMapping("/user/events/{eventId}/participate")
+    @GetMapping("/participate/{eventId}")
     public ResponseEntity<User> participate(@PathVariable Long eventId) throws ParticipationNotValidException {
         User user = eventService.participateInAnEvent(eventId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/user/events/participating")
-    public ResponseEntity<Set<Event>> getParticipatedEvents() {
-        Set<Event> participatingEvents = userService.getParticipatedEvents();
+    @GetMapping("/participating")
+    public ResponseEntity<Set<Event>> getParticipatingEvents(@RequestParam(required = false) Long userId) {
+        Set<Event> participatingEvents = userService.getParticipatingEvents(userId);
         return new ResponseEntity<>(participatingEvents, HttpStatus.OK);
     }
 
-    @GetMapping("/user/events/participated")
+    @GetMapping("/participants")
     public ResponseEntity<Set<User>> getEventParticipants(@RequestParam(required = true) long eventId)
             throws UnAuthorizedAccessException {
         Set<User> participants = eventService.getEventParticipants(eventId);
@@ -86,14 +84,14 @@ public class UserController {
 
     }
 
-    @PutMapping("/user/events/modify/{eventId}")
+    @PutMapping("/modify/{eventId}")
     public ResponseEntity<Event> modifyEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO,
             @PathVariable Long eventId) {
         Event modifiedEvent = eventService.modifyEvent(eventCreationDTO, eventId);
         return new ResponseEntity<>(modifiedEvent, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/user/events/delete/{eventId}")
+    @DeleteMapping("/cancel/{eventId}")
     public ResponseEntity<Event> cancelEvent(@PathVariable Long eventId) {
         Event deletedEvent = eventService.cancelEvent(eventId);
         return new ResponseEntity<>(deletedEvent, HttpStatus.OK);

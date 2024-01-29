@@ -28,6 +28,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByStartTimeBetween(Timestamp startDate, Timestamp endDate);
 
+    List<Event> findByEndTimeBetween(Timestamp startDate, Timestamp endDate);
+
+    List<Event> findByEndTimeAfter(Timestamp endDate);
+
     List<Event> findByCreator(User creator);
 
 }

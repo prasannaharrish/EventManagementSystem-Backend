@@ -2,12 +2,16 @@ package com.project.eventManagement.dto;
 
 import java.sql.Timestamp;
 
+import com.project.eventManagement.entity.Event;
+import com.project.eventManagement.validation.UniqueField;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class EventCreationDTO {
 
     @NotEmpty(message = "Title cannot be empty")
+    @UniqueField(message = "Event Title Alreay Taken. Choose an unique One", fieldName = "title", className = Event.class)
     private String title;
 
     @NotEmpty(message = "Location cannot be empty")

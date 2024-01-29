@@ -1,7 +1,6 @@
 package com.project.eventManagement.advice;
 
 import java.util.ArrayList;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,22 +19,24 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ArrayList<ErrorResponse>> handleInvalidArguments(MethodArgumentNotValidException exception) {
-        ArrayList<ErrorResponse> errorList = new ArrayList<>();
+    public ResponseEntity<ErrorResponse> handleInvalidArguments(MethodArgumentNotValidException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
         exception.getBindingResult().getFieldErrors().forEach(error -> {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
-                    HttpStatus.BAD_REQUEST.getReasonPhrase(), error.getDefaultMessage());
-            errorList.add(errorResponse);
+            errorMessage.add(error.getDefaultMessage());
         });
-        return new ResponseEntity<>(errorList, HttpStatus.BAD_REQUEST);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(EventNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleEventNotFound(EventNotFoundException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
@@ -43,16 +44,20 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidRequestError(HttpMessageNotReadableException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), exception.getMessage());
+                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 
     }
@@ -60,16 +65,20 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(InvalidCategoryIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidCategoryId(InvalidCategoryIdException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleIllegalArguments(IllegalArgumentException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
@@ -77,8 +86,10 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(ParticipationNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidParticipation(ParticipationNotValidException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), exception.getMessage());
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
@@ -86,8 +97,10 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(UnAuthorizedAccessException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleUnAuthorizedAccess(UnAuthorizedAccessException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), exception.getMessage());
+                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 
     }

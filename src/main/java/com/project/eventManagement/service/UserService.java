@@ -42,21 +42,32 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<Event> getCreatedEvents() {
+    public List<Event> getCreatedEvents(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User creator = userRepository.findByUsername(username).get();
-        List<Event> createdEvents = eventRepository.findByCreator(creator);
-        return createdEvents;
+        User user = userRepository.findByUsername(username).get();
+        if (user.getAuthority().equals("ADMIN")) {
+            List<Event> createdEvents = eventRepository.findByCreator(userRepository.findById(userId).get());
+            return createdEvents;
+        } else {
+            List<Event> createdEvents = eventRepository.findByCreator(user);
+            return createdEvents;
+        }
 
     }
 
-    public Set<Event> getParticipatedEvents() {
+    public Set<Event> getParticipatingEvents(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User currentUser = userRepository.findByUsername(username).get();
-        Set<Event> participatingEvents = currentUser.getParticipatingEvents();
-        return participatingEvents;
+        if (currentUser.getAuthority().equals("ADMIN")) {
+            Set<Event> participatingEvents = userRepository.findById(userId).get().getParticipatingEvents();
+            return participatingEvents;
+
+        } else {
+            Set<Event> participatingEvents = currentUser.getParticipatingEvents();
+            return participatingEvents;
+        }
     }
 
     public User getUserById(Long userId) {

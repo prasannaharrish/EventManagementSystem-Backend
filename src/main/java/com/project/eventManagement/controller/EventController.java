@@ -27,7 +27,6 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -37,29 +36,29 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/events/all")
+    @GetMapping("/events")
     public ResponseEntity<List<Event>> getAllEventS() {
 
         List<Event> events = eventService.getAllEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/events/category")
-    public ResponseEntity<Event> getEventByEventId(@RequestParam(required = true) long eventId)
+    @GetMapping("/events/{eventId}")
+    public ResponseEntity<Event> getEventByEventId(@PathVariable long eventId)
             throws EventNotFoundException {
         Event event = eventService.getEventById(eventId);
         return new ResponseEntity<>(event, HttpStatus.OK);
 
     }
 
-    @GetMapping("/events")
-    public ResponseEntity<List<Event>> getEventByCategory(@RequestParam(required = true) int categoryId)
+    @GetMapping("/events/category/{categoryId}")
+    public ResponseEntity<List<Event>> getEventByCategory(@PathVariable int categoryId)
             throws EventNotFoundException {
         List<Event> events = eventService.getEventByCategory(categoryId);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("events/{filter}")
+    @GetMapping("events/time/{filter}")
     public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
         List<Event> events = new ArrayList<>();
         if (filter.equals("past")) {
