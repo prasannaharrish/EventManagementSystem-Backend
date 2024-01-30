@@ -85,7 +85,7 @@ public class AuthenticationController {
             resetLink = sendResetLink(user, getUrl(request), token);
         }
 
-        return new ResponseEntity<>(resetLink + "Click on this Link to reset your Password", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(resetLink + "\nClick on this Link to reset your Password", HttpStatus.ACCEPTED);
     }
 
     private String sendResetLink(User user, String url, String token)
