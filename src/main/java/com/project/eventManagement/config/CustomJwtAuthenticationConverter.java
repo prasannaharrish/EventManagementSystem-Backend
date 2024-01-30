@@ -30,7 +30,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     public AbstractAuthenticationToken convert(Jwt jwt) {
 
         if (tokenService.isTokenRevoked(jwt.getTokenValue())) {
-            
+
             throw new UnAuthorizedAccessException("Your Login Session has Expired. Please login to continue");
 
         }

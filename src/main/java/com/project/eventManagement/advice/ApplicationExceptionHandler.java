@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
+import com.project.eventManagement.exception.InvalidTokenException;
 import com.project.eventManagement.exception.ParticipationNotValidException;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.exception.UserNotFoundException;
@@ -105,14 +106,13 @@ public class ApplicationExceptionHandler {
 
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<ErrorResponse> handleUnAuthorizedAccess(Exception exception) {
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException exception) {
         ArrayList<String> errorMessage = new ArrayList<>();
         errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage);
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

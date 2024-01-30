@@ -27,8 +27,6 @@ import com.project.eventManagement.repository.CategoryRepository;
 import com.project.eventManagement.repository.EventRepository;
 import com.project.eventManagement.repository.UserRepository;
 
-
-
 @Service
 public class EventService {
 
@@ -141,7 +139,11 @@ public class EventService {
                 eventTomodify.setTitle(eventCreationDTO.getTitle());
                 eventTomodify.setDescription(eventCreationDTO.getDescription());
                 eventTomodify.setLocation(eventCreationDTO.getLocation());
-                eventTomodify.setCategory(categoryRepository.findById(eventCreationDTO.getCategoryId()).get());
+
+                Category category = categoryRepository.findById(eventCreationDTO.getCategoryId())
+                        .orElseThrow(() -> new InvalidCategoryIdException("Invalid category id:"));
+
+                eventTomodify.setCategory(category);
                 eventTomodify.setUpdatedAt(new Date());
                 validateDates(eventCreationDTO.getStartTime(), eventCreationDTO.getEndTime());
                 eventTomodify.setStartTime(eventCreationDTO.getStartTime());

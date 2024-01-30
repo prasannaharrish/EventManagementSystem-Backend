@@ -17,6 +17,7 @@ import com.project.eventManagement.entity.Event;
 import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.exception.UserNotFoundException;
+import com.project.eventManagement.password.PasswordResetTokenService;
 import com.project.eventManagement.repository.EventRepository;
 import com.project.eventManagement.repository.UserRepository;
 
@@ -31,6 +32,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private PasswordResetTokenService passwordResetTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
