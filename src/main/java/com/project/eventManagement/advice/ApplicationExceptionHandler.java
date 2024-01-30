@@ -105,4 +105,14 @@ public class ApplicationExceptionHandler {
 
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedAccess(Exception exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+    }
 }
