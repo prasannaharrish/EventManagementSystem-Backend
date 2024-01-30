@@ -47,7 +47,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping("/events")
     public ResponseEntity<Event> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO)
             throws InvalidCategoryIdException, IllegalArgumentException, MethodArgumentNotValidException {
         Event event = eventService.createEvent(eventCreationDTO.getTitle(), eventCreationDTO.getLocation(),
@@ -58,19 +58,20 @@ public class UserController {
 
     }
 
-    @GetMapping("/created")
+    @GetMapping("/my-events")
     public ResponseEntity<List<Event>> getCreatedEvents(@RequestParam(required = false) Long userId) {
         List<Event> createdEvents = userService.getCreatedEvents(userId);
         return new ResponseEntity<>(createdEvents, HttpStatus.OK);
     }
 
-    @GetMapping("/participate/{eventId}")
-    public ResponseEntity<User> participate(@PathVariable Long eventId) throws ParticipationNotValidException {
+    @PostMapping("/participate/{eventId}")
+    public ResponseEntity<User> participate(@PathVariable Long eventId, @RequestBody(required = false) Event event)
+            throws ParticipationNotValidException {
         User user = eventService.participateInAnEvent(eventId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/participated")
+    @GetMapping("/participated-events")
     public ResponseEntity<Set<Event>> getParticipatedEvents(@RequestParam(required = false) Long userId) {
         Set<Event> participatingEvents = userService.getParticipatedEvents(userId);
         return new ResponseEntity<>(participatingEvents, HttpStatus.OK);
@@ -79,19 +80,24 @@ public class UserController {
     @GetMapping("/participants")
     public ResponseEntity<Set<User>> getEventParticipants(@RequestParam(required = true) long eventId)
             throws UnAuthorizedAccessException {
-        Set<User> participants = eventService.getEventParticipants(eventId);
-        return new ResponseEntity<>(participants, HttpStatus.OK);
+        try {
+            Set<User> participants = eventService.getEventParticipants(eventId);
+            return new ResponseEntity<>(participants, HttpStatus.OK);
+        } catch (UnAuthorizedAccessException e) {
+
+            throw new UnAuthorizedAccessException("logout exception");
+        }
 
     }
 
-    @PutMapping("/modify/{eventId}")
+    @PutMapping("/events/{eventId}")
     public ResponseEntity<Event> modifyEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO,
             @PathVariable Long eventId) {
         Event modifiedEvent = eventService.modifyEvent(eventCreationDTO, eventId);
         return new ResponseEntity<>(modifiedEvent, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/cancel/{eventId}")
+    @DeleteMapping("/events/{eventId}")
     public ResponseEntity<Event> cancelEvent(@PathVariable Long eventId) {
         Event deletedEvent = eventService.cancelEvent(eventId);
         return new ResponseEntity<>(deletedEvent, HttpStatus.OK);

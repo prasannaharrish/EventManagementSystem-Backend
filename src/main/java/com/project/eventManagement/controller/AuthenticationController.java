@@ -1,10 +1,13 @@
 package com.project.eventManagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +40,18 @@ public class AuthenticationController {
         return authenticationService.loginUser(loginDTO.getEmail(), loginDTO.getPassword());
     }
 
+    @GetMapping("auth/logout")
+    public ResponseEntity<String> logout(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        String token = authenticationService.extractTokenFromRequest(authorizationHeader);
+        if (token != null) {
+            authenticationService.logout(token);
+            return new ResponseEntity<>("Loggged out Successfully!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Missing Authorization header", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
     @PostMapping("admin/register")
     public ResponseEntity<User> registerAdmin(@RequestBody @Valid RegistrationDTO registrationDTO) {
         User user = authenticationService.registerAdmin(registrationDTO.getFirstName(), registrationDTO.getLastName(),
@@ -44,4 +59,5 @@ public class AuthenticationController {
                 registrationDTO.getPhone());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,8 @@ import com.project.eventManagement.entity.User;
 import com.project.eventManagement.exception.UserNotFoundException;
 import com.project.eventManagement.repository.RoleRepository;
 import com.project.eventManagement.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 @Transactional
@@ -80,6 +83,21 @@ public class AuthenticationService {
             throw new UserNotFoundException("Invalid credentials");
 
         }
+
+    }
+
+    public void logout(String token) {
+        tokenService.revokeToken(token);
+    }
+
+    public String extractTokenFromRequest(String authorizationHeader) {
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+
+        }
+
+        return null;
 
     }
 }
