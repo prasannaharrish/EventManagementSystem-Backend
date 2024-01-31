@@ -28,20 +28,19 @@ public class PasswordResetTokenService {
 
     }
 
-    public String validateToken(String token) {
+    public boolean isValid(String token) {
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
-
         if (passwordResetToken == null) {
             throw new InvalidTokenException("The provided Token is Invalid");
         }
 
         if (passwordResetToken.getExpirationTime().toInstant().isBefore(Instant.now())) {
 
-            return "Link has expired, Resend Link";
+            throw new InvalidTokenException("The token has Expired.Please resend the link to reset your password");
 
         }
 
-        return "valid";
+        return true;
 
     }
 

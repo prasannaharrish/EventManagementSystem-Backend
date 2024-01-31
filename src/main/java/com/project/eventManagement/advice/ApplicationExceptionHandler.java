@@ -12,6 +12,7 @@ import com.project.eventManagement.exception.EventNotFoundException;
 import com.project.eventManagement.exception.InvalidCategoryIdException;
 import com.project.eventManagement.exception.InvalidTokenException;
 import com.project.eventManagement.exception.ParticipationNotValidException;
+import com.project.eventManagement.exception.PasswordNotMatchException;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.exception.UserNotFoundException;
 
@@ -109,6 +110,16 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(InvalidTokenException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException exception) {
+        ArrayList<String> errorMessage = new ArrayList<>();
+        errorMessage.add(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordNotMatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleInvalidPasswords(PasswordNotMatchException exception) {
         ArrayList<String> errorMessage = new ArrayList<>();
         errorMessage.add(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(

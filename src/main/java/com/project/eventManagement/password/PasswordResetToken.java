@@ -34,6 +34,10 @@ public class PasswordResetToken {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public PasswordResetToken() {
+
+    }
+
     public PasswordResetToken(String token, User user) {
         this.token = token;
         this.user = user;

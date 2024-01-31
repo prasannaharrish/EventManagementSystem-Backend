@@ -7,20 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.eventManagement.dto.LoginDTO;
 import com.project.eventManagement.dto.LoginResponseDTO;
 import com.project.eventManagement.dto.RegistrationDTO;
 import com.project.eventManagement.entity.User;
+import com.project.eventManagement.exception.PasswordNotMatchException;
 import com.project.eventManagement.exception.UserNotFoundException;
 import com.project.eventManagement.password.PasswordResetRequestDTO;
 import com.project.eventManagement.password.PasswordResetTokenService;
+import com.project.eventManagement.repository.UserRepository;
 import com.project.eventManagement.service.AuthenticationService;
 import com.project.eventManagement.service.UserService;
 
@@ -40,6 +44,12 @@ public class AuthenticationController {
 
     @Autowired
     private PasswordResetTokenService passwordResetTokenService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("auth/register")
     public ResponseEntity<User> registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
@@ -83,9 +93,30 @@ public class AuthenticationController {
             String token = UUID.randomUUID().toString();
             passwordResetTokenService.assignTokenToUser(user, token);
             resetLink = sendResetLink(user, getUrl(request), token);
+        } else {
+            throw new UserNotFoundException("There is no user linked with this email.");
         }
 
         return new ResponseEntity<>(resetLink + "\nClick on this Link to reset your Password", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(@RequestParam String token,
+            @RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
+        if (passwordResetTokenService.isValid(token)) {
+            User user = passwordResetTokenService.findUserByToken(token);
+            if (passwordResetRequestDTO.getNewPassword().equals(passwordResetRequestDTO.getConfirmPassword())) {
+                user.setPassword(passwordEncoder.encode(passwordResetRequestDTO.getConfirmPassword()));
+                userRepository.saveAndFlush(user);
+                return new ResponseEntity<>("Password changed Successfully.", HttpStatus.ACCEPTED);
+            } else {
+                throw new PasswordNotMatchException("The passwords Do not match.");
+
+            }
+
+        } else {
+            return new ResponseEntity<>("Token is Invalid Please Reset the token", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private String sendResetLink(User user, String url, String token)

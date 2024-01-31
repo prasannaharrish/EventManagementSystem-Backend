@@ -63,6 +63,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/auth/register").permitAll();
                     auth.requestMatchers("/auth/logout").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers("/auth/forgot-password").permitAll();
+                    auth.requestMatchers("/resetPassword").permitAll();
                     auth.requestMatchers("/events/**").permitAll();
                     auth.requestMatchers("/{filter}-events").permitAll();
                     auth.anyRequest().authenticated();
