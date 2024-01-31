@@ -58,7 +58,7 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/{filter}-events")
+    @GetMapping("/events{filter}")
     public ResponseEntity<List<Event>> getFilteredEvents(@PathVariable String filter) {
         List<Event> events = new ArrayList<>();
         if (filter.equals("past")) {

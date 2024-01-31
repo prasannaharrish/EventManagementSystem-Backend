@@ -58,7 +58,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/my-events")
+    @GetMapping("/events/my-events")
     public ResponseEntity<List<Event>> getCreatedEvents(@RequestParam(required = false) Long userId) {
         List<Event> createdEvents = userService.getCreatedEvents(userId);
         return new ResponseEntity<>(createdEvents, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/participated-events")
+    @GetMapping("/events/participated")
     public ResponseEntity<Set<Event>> getParticipatedEvents(@RequestParam(required = false) Long userId) {
         Set<Event> participatingEvents = userService.getParticipatedEvents(userId);
         return new ResponseEntity<>(participatingEvents, HttpStatus.OK);

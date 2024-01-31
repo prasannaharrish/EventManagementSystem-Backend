@@ -58,10 +58,10 @@ public class PasswordResetTokenService {
     public void sendEmail(String resetLink, User user) throws MessagingException, UnsupportedEncodingException {
         String subject = "Password Reset Verification";
         String senderName = "EventHub - An event repository!";
-        String mailContent = "<p> Hi," + user.getFirstName() + ", </p>" +
-                "<p><b>You have requested to reset your password,</b>" + ""
-                + "Please,follow the link to reset your password.</p>" + "<a href = \"" + resetLink
-                + "\" >Reset Password</a>" + "<p>EventHub - An event Management Service.";
+        String mailContent = "<p><b> Hi" + user.getFirstName() + ",</b></p>" +
+                "<p><b>You have requested to reset your password.</b>" + ""
+                + " Please follow the link to reset your password.</p>" + "<a href = \"" + resetLink
+                + "\" >Reset Password</a>" + "<p>From, EventHub - An event Management Service.";
         MimeMessage message = javaMailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
         messageHelper.setFrom("eventhub72@gmail.com", senderName);

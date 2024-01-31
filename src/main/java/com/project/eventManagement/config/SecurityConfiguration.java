@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -25,9 +26,11 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.project.eventManagement.advice.TokenRevokedAuthenticationEntryPoint;
 import com.project.eventManagement.utils.RSAKeyProperties;
 
 @Configuration
+@EnableAspectJAutoProxy
 public class SecurityConfiguration {
 
     private final RSAKeyProperties keys;
@@ -43,6 +46,9 @@ public class SecurityConfiguration {
 
     @Autowired
     private CustomJwtConfiguration customJwtConfiguration;
+
+    @Autowired
+    private TokenRevokedAuthenticationEntryPoint tokenRevokedAuthenticationEntryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
@@ -68,6 +74,8 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/{filter}-events").permitAll();
                     auth.anyRequest().authenticated();
                 })
+                .formLogin(page -> page.loginPage("/auth/login").permitAll())
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(tokenRevokedAuthenticationEntryPoint))
                 .oauth2ResourceServer(configurer -> configurer
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .jwtAuthenticationConverter(customJwtConfiguration.jwtAuthenticationConverter())))
