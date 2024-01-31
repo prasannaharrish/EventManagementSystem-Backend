@@ -100,7 +100,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(resetLink + "\nClick on this Link to reset your Password", HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/resetPassword")
+    @PostMapping("resetPassword")
     public ResponseEntity<String> resetPassword(@RequestParam String token,
             @RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
         if (passwordResetTokenService.isValid(token)) {
