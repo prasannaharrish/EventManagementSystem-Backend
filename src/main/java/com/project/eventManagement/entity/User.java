@@ -64,6 +64,7 @@ public class User implements UserDetails {
     @JoinTable(name = "user_event", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "event_id") })
     @JsonManagedReference
+    @JsonIgnore
     private Set<Event> participatingEvents;
 
     @Temporal(TemporalType.TIMESTAMP)

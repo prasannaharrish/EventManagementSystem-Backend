@@ -80,13 +80,8 @@ public class UserController {
     @GetMapping("/participants")
     public ResponseEntity<Set<User>> getEventParticipants(@RequestParam(required = true) long eventId)
             throws UnAuthorizedAccessException {
-        try {
-            Set<User> participants = eventService.getEventParticipants(eventId);
-            return new ResponseEntity<>(participants, HttpStatus.OK);
-        } catch (UnAuthorizedAccessException e) {
-
-            throw new UnAuthorizedAccessException("logout exception");
-        }
+        Set<User> participants = eventService.getEventParticipants(eventId);
+        return new ResponseEntity<>(participants, HttpStatus.OK);
 
     }
 

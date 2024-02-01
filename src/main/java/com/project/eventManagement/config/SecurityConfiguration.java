@@ -71,10 +71,8 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/auth/forgot-password").permitAll();
                     auth.requestMatchers("/resetPassword").permitAll();
                     auth.requestMatchers("/events/**").permitAll();
-                    auth.requestMatchers("/{filter}-events").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .formLogin(page -> page.loginPage("/auth/login").permitAll())
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(tokenRevokedAuthenticationEntryPoint))
                 .oauth2ResourceServer(configurer -> configurer
                         .jwt(jwtConfigurer -> jwtConfigurer

@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.project.eventManagement.validation.UniqueField;
-
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -51,7 +48,8 @@ public class Event {
     private User creator;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "participatingEvents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "participatingEvents", fetch = FetchType.EAGER)
     private Set<User> participants;
 
     @ManyToOne(fetch = FetchType.EAGER)

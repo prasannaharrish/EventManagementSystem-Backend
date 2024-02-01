@@ -105,7 +105,6 @@ public class EventService {
             User participant = getCurrentUser();
             participant.getParticipatingEvents().add(event);
             userRepository.saveAndFlush(participant);
-            System.out.println("event participants:" + event.getParticipants());
             return participant;
 
         } else {
@@ -163,6 +162,12 @@ public class EventService {
         }
         User currentUser = getCurrentUser();
         if (currentUser.equals(eventTocancel.getCreator()) || currentUser.getAuthority().equals("ADMIN")) {
+
+            for (User participant : eventTocancel.getParticipants()) {
+                participant.getParticipatingEvents().remove(eventTocancel);
+            }
+            eventTocancel.getParticipants().clear();
+            eventRepository.saveAndFlush(eventTocancel);
             eventRepository.delete(eventTocancel);
             return eventTocancel;
         } else {

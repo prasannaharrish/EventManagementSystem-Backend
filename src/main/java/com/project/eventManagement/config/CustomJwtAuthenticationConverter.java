@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
+import com.nimbusds.jose.proc.SecurityContext;
 import com.project.eventManagement.exception.UnAuthorizedAccessException;
 import com.project.eventManagement.service.TokenService;
 
@@ -36,7 +38,9 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 
         Collection<GrantedAuthority> authorities = jwtGrantedAuthoritiesConverter.convert(jwt);
 
-        return new JwtAuthenticationToken(jwt, authorities);
+        JwtAuthenticationToken tokenObject = new JwtAuthenticationToken(jwt, authorities);
+        return tokenObject;
+
     }
 
 }
