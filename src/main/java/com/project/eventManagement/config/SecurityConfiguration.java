@@ -60,14 +60,13 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+        // SecurityFilterChain s = http;
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/auth/login").permitAll();
                     auth.requestMatchers("/auth/register").permitAll();
-                    auth.requestMatchers("/auth/logout").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers("/auth/forgot-password").permitAll();
                     auth.requestMatchers("/resetPassword").permitAll();
                     auth.requestMatchers("/events/**").permitAll();

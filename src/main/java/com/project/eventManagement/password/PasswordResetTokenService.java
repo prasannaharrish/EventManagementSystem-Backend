@@ -63,7 +63,7 @@ public class PasswordResetTokenService {
                 + " Please follow the link to reset your password.</p>" + "<a href = \"" + resetLink
                 + "\" >Reset Password</a>" + "<p>From, EventHub - An event Management Service.";
         MimeMessage message = javaMailSender.createMimeMessage();
-        var messageHelper = new MimeMessageHelper(message);
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message);
         messageHelper.setFrom("eventhub72@gmail.com", senderName);
         messageHelper.setTo(user.getEmail());
         messageHelper.setSubject(subject);
