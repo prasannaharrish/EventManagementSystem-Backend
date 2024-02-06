@@ -27,6 +27,8 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.project.eventManagement.advice.TokenRevokedAuthenticationEntryPoint;
+import com.project.eventManagement.repository.UserRepository;
+import com.project.eventManagement.service.UserService;
 import com.project.eventManagement.utils.RSAKeyProperties;
 
 @Configuration
@@ -93,5 +95,4 @@ public class SecurityConfiguration {
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
-
 }
